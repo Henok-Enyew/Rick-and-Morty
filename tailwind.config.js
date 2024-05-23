@@ -78,7 +78,8 @@ export default {
       screens: {
         "2xl": { max: "1535px" }, // <= 1535px
         xl: { max: "1279px" }, // <= 1279px
-        lg: { max: "1023px" }, // <= 1023px
+        // lg: { max: "1023px" }, // <= 1023px
+        lg: { max: "1100px" }, // <= 1023px
         md: { max: "767px" }, // <= 767px
         sm: { max: "639px" }, // <= 639px
       },

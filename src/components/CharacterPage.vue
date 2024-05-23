@@ -62,8 +62,11 @@ console.log(result);
       </svg>
     </div>
     <p v-if="error">{{ error.message }}</p>
-    <div v-else class="w-full flex gap-2 z-20 relative text-white px-24">
-      <div class="w-5/12 pt-16">
+    <div
+      v-else
+      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8"
+    >
+      <div class="w-5/12 pt-10">
         <div>
           <div class="border border-gray-400 w-80">
             <img
@@ -74,10 +77,11 @@ console.log(result);
             <p class="px-4 text-2xl">{{ result?.character.name }}</p>
             <p class="px-4">Status: {{ result?.character.status }}</p>
             <p class="px-4">Species: {{ result?.character.species }}</p>
-            <p class="px-4">Gender: {{ new Date(result?.character.gender) }}</p>
+            <p class="px-4">Gender: {{ result?.character.gender }}</p>
           </div>
+          <p class="mt-1">Last known location</p>
           <router-link
-            class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300 mt-3"
+            class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 lg:w-72 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
             :to="`/Location/${result?.character.location.id}`"
           >
             <svg
@@ -105,14 +109,16 @@ console.log(result);
         <p class="text-lg mb-2">
           Episodes {{ result?.character.name.split(" ")[0] }} has participated
         </p>
-        <div class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll">
+        <div
+          class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll lg:grid-cols-1 lg:justify-center"
+        >
           <div
             v-for="episode in result?.character.episode"
             :key="episode"
             class=""
           >
             <router-link
-              class="bg-seasonBackground px-2 flex flex-col items-center w-72 rounded-full border-t border-l border-gray-400 hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
+              class="bg-seasonBackground px-2 flex flex-col items-center w-72 lg:w-96 rounded-full border-t border-l border-gray-400 hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
               :to="`/Episode/${episode.id}`"
             >
               <svg
@@ -152,7 +158,7 @@ console.log(result);
       </div>
     </div>
     <footer
-      class="h-12 mt-3 bg-w-light w-full z-20 relative flex justify-center gap-7"
+      class="h-12 mt-3 bg-w-light w-full z-20 absolute bottom-0 flex justify-center gap-7"
     >
       <p class="flex justify-center items-center gap-2 text-gray-300">
         <a

@@ -2,117 +2,131 @@
 import gql from "graphql-tag";
 import { useQuery } from "@vue/apollo-composable";
 import { ref, onMounted } from "vue";
-import axios from "axios";
-// const Characters_Query = gql`
-//   query Characters {
-//     charactersByIds(
-//       ids: [
-//         1
-//         2
-//         3
-//         4
-//         5
-//         6
-//         7
-//         8
-//         9
-//         10
-//         11
-//         12
-//         13
-//         14
-//         15
-//         16
-//         17
-//         18
-//         19
-//         20
-//         21
-//         22
-//         23
-//         24
-//         25
-//         26
-//         27
-//         28
-//         29
-//         30
-//         31
-//         32
-//         33
-//         34
-//         35
-//         36
-//         37
-//         38
-//         39
-//         40
-//         41
-//         42
-//         43
-//         44
-//         45
-//         46
-//         47
-//         48
-//         49
-//         50
-//         51
-//       ]
-//     ) {
-//       name
-//       status
-//       image
-//       id
-//     }
-//   }
-// `;
-
-// const { result, loading, error } = useQuery(Characters_Query);
-
-const characters = ref([]);
-const loading = ref(false);
-const error = ref(null);
-const allCharactersLoaded = ref(false);
-let page = 1;
-let totalPages = 1;
-
-const loadCharacters = async () => {
-  loading.value = true;
-  try {
-    const response = await axios.get(
-      `https://rickandmortyapi.com/api/character?page=${page}`
-    );
-    const data = response.data;
-    characters.value.push(...data.results);
-    totalPages = data.info.pages;
-    page++;
-    if (page > totalPages) {
-      allCharactersLoaded.value = true;
+const Characters_Query = gql`
+  query Characters {
+    charactersByIds(
+      ids: [
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        10
+        11
+        12
+        13
+        14
+        15
+        16
+        17
+        18
+        19
+        20
+        21
+        22
+        23
+        24
+        25
+        26
+        27
+        28
+        29
+        30
+        31
+        32
+        33
+        34
+        35
+        36
+        37
+        38
+        39
+        40
+        41
+        42
+        43
+        44
+        45
+        46
+        47
+        48
+        49
+        50
+        51
+        52
+        53
+        54
+        55
+        56
+        57
+        58
+        59
+        60
+        61
+        62
+        63
+        64
+        65
+        66
+        67
+        68
+        69
+        70
+        71
+        72
+        73
+        74
+        75
+        76
+        77
+        78
+        79
+        80
+        81
+        82
+        83
+        84
+        85
+        86
+        87
+        88
+        89
+        90
+        91
+        92
+        93
+        94
+        95
+        96
+        97
+        98
+        99
+        100
+      ]
+    ) {
+      name
+      status
+      image
+      id
     }
-  } catch (err) {
-    error.value = err.message;
-  } finally {
-    loading.value = false;
   }
-};
+`;
 
-const loadMore = () => {
-  if (!allCharactersLoaded.value) {
-    loadCharacters();
-  }
-};
-
-onMounted(() => {
-  loadCharacters();
-});
+const { result, loading, error } = useQuery(Characters_Query);
 </script>
 <template>
-  <div class="w-full h-screen bg-primary text-white px-20 pt-1" id="characters">
+  <div
+    class="w-full h-screen bg-primary text-white px-20 lg:px-8 pt-8"
+    id="characters"
+  >
     <p class="text-header text-3xl z-20 relative mb-4">Characters (826)</p>
 
     <div
-      class="grid grid-cols-5 gap-4 bg-charactersBg px-8 py-4 overflow-y-scroll w-11/12 h-144 ml-8 rounded-md"
+      class="grid grid-cols-5 gap-4 bg-charactersBg px-8 py-4 overflow-y-scroll w-11/12 h-144 ml-8 lg:ml-4 rounded-md"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -138,8 +152,8 @@ onMounted(() => {
       <router-link
         v-motion-slide-visible-bottom
         v-else
-        class="bg-secondary40 w-40 pb-1 hover:bg-secondary40Active border border-transparent hover:border-white transition-all duration-300 transform hover:rotate-3 hover:scale-105"
-        v-for="character in characters"
+        class="bg-secondary40 w-40 lg:w-32 pb-1 hover:bg-secondary40Active border border-transparent hover:border-white transition-all duration-300 transform hover:rotate-3 hover:scale-105"
+        v-for="character in result?.charactersByIds"
         :key="character"
         :to="`Character/${character.id}`"
       >
@@ -171,13 +185,13 @@ onMounted(() => {
         </p>
       </router-link>
     </div>
-    <button
+    <!-- <button
       v-if="!loading && !error && !allCharactersLoaded"
       @click="loadMore"
       class="bg-secondary40 px-3 py-1 rounded-md mt-2 absolute left-1/2 -translate-x-1/2 hover:bg-secondary40Active transition-all duration-300"
     >
       Load More
-    </button>
+    </button> -->
   </div>
 </template>
 <style></style>

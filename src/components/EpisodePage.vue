@@ -56,7 +56,10 @@ const { result, loading, error } = useQuery(Episode_Query);
     </div>
     <p v-if="error">{{ error.message }}</p>
 
-    <div v-else class="w-full flex gap-2 z-20 relative text-white px-24 py-1">
+    <div
+      v-else
+      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 py-1"
+    >
       <div class="w-5/12 py-16">
         <p class="text-6xl">{{ result?.episode.episode }}</p>
         <p class="text-2xl font-thin mb-4">{{ result?.episode.name }}</p>
@@ -106,7 +109,7 @@ const { result, loading, error } = useQuery(Episode_Query);
             v-for="character in result?.episode.characters"
             :key="character.id"
             :to="`/Character/${character.id}`"
-            class="w-48 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
+            class="w-48 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
           >
             <img
               :src="character.image"
@@ -124,7 +127,7 @@ const { result, loading, error } = useQuery(Episode_Query);
       </div>
     </div>
     <footer
-      class="h-12 bg-w-light w-full z-20 relative flex justify-center gap-7"
+      class="h-12 bg-w-light w-full z-20 absolute bottom-0 flex justify-center gap-7"
     >
       <p class="flex justify-center items-center gap-2 text-gray-300">
         <a

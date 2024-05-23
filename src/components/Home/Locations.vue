@@ -146,11 +146,11 @@ const { result, loading, error } = useQuery(Locations_Query);
 <template>
   <div
     id="locations"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Locations-background.jpg')] px-32 py-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Locations-background.jpg')] px-32 lg:px-8 py-8"
   >
     <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
     <div
-      class="text-white relative z-20 w-11/12 bg-locationsBackground h-128 mt-4 ml-12 rounded-md border-t border-l border-locations grid grid-cols-2 px-16 py-8 justify-center gap-y-2 overflow-auto"
+      class="text-white relative z-20 w-11/12 bg-locationsBackground h-128 mt-4 ml-12 rounded-md border-t border-l border-locations grid grid-cols-2 px-16 lg:px-4 py-8 gap-y-2 overflow-auto"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -181,7 +181,7 @@ const { result, loading, error } = useQuery(Locations_Query);
       >
         <router-link
           v-motion-slide-visible-bottom
-          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
+          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
           :to="`/Location/${location.id}`"
         >
           <svg

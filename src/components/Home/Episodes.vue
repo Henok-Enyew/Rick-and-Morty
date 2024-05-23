@@ -81,21 +81,22 @@ const activeSeason = ref(1);
 <template>
   <div
     id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')] px-32 py-8 max-lg:px-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')] px-32 py-8 lg:px-8 md:px-2"
   >
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
     <div
-      class="z-20 relative flex items-center w-4/5 gap-8 ml-32 mt-4 md:ml-8"
+      class="z-20 relative flex items-center w-4/5 lg:w-11/12 md:w-11/12 gap-8 ml-32 mt-4 lg:ml-8 md:ml-1"
       v-motion-slide-visible-bottom
     >
       <div
-        class="text-gray-200 flex flex-col md:text-sm items-center bg-seasonBackground px-8 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
+        class="text-gray-200 flex flex-col lg:text-sm md:text-xs items-center bg-seasonBackground px-8 lg:px-4 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
         v-for="season in seasons"
         :key="season"
         :class="activeSeason == season[8] ? 'activeSeason' : ''"
         @click="activeSeason = season[8]"
       >
         <svg
+          class="md:w-18 md:h-18"
           xmlns="http://www.w3.org/2000/svg"
           width="22"
           height="22"
@@ -111,7 +112,7 @@ const activeSeason = ref(1);
       </div>
     </div>
     <div
-      class="text-white relative z-20 w-4/6 bg-episodesBackground h-120 ml-48 mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center gap-y-2"
+      class="text-white relative z-20 w-4/6 lg:w-11/12 md:w-11/12 lg:ml-16 bg-episodesBackground h-120 ml-48 mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center gap-y-2"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -142,7 +143,7 @@ const activeSeason = ref(1);
         class=""
       >
         <router-link
-          class="bg-seasonBackground px-2 flex flex-col items-center w-72 rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
+          class="bg-seasonBackground px-2 flex flex-col items-center w-72 lg:w-64 lg:text-sm rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
           :to="`/Episode/${episode.id}`"
           v-motion-slide-visible-bottom
         >

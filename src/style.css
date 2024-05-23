@@ -4,7 +4,31 @@
 @tailwind utilities;
 html {
   @apply scroll-smooth;
+  scrollbar-width: thin;
+  /* scrollbar-color: #121c0e transparent; */
+  scrollbar-width: none;
 }
 body {
   font-family: "Rubik", sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: transparent;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #51d9283d;
+  border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #51d92880;
 }

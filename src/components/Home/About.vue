@@ -23,11 +23,11 @@ const photos = [
     <img
       src="../../assets/Images/Portal.png"
       alt=""
-      class="absolute w-2/5 -right-16 opacity-95"
+      class="absolute w-2/5 -right-16 top-1/2 -translate-y-1/2 opacity-95 lg:h-4/6 lg:w-3/5 lg:-right-28"
     />
     <p class="text-header text-3xl mt-12 mb-4">About</p>
     <div
-      class="text-white w-4/5 absolute left-1/2 -translate-x-1/2 bg-primaryLight bg-opacity-30 backdrop-blur-xl h-4/5 border-t-2 border-l border-header rounded-xl grid grid-cols-2"
+      class="text-white w-4/5 absolute left-1/2 -translate-x-1/2 bg-primaryLight bg-opacity-30 backdrop-blur-xl h-4/5 border-t-2 border-l border-header rounded-xl grid grid-cols-2 items-center lg:grid-cols-1 lg:items-center lg:px-16 lg:overflow-y-scroll"
     >
       <div v-motion-pop-visible class="py-8 pl-10 w-9/12">
         <swiper
@@ -45,12 +45,12 @@ const photos = [
             <img
               :src="`src/assets/Images/Carousel/${photo}`"
               alt="photo"
-              class="w-72 !opacity-100 h-128 ml-8"
+              class="w-72 !opacity-100 h-128 ml-8 lg:w-60 lg:h-96"
             />
           </swiper-slide>
         </swiper>
       </div>
-      <div class="self-center pr-8" v-motion-pop-visible>
+      <div class="self-center pr-8 lg:text-md" v-motion-pop-visible>
         "Rick and Morty" follows the adventures of an eccentric scientist, Rick
         Sanchez, and his easily influenced grandson, Morty Smith, as they
         journey through alternate dimensions and bizarre galaxies. Fueled by
@@ -76,7 +76,7 @@ const photos = [
 
 .swiper-button-prev,
 .swiper-button-next {
-  @apply text-secondary transition-all duration-300;
+  @apply text-secondary transition-all duration-300 lg:hidden;
 }
 
 .swiper-button-prev:hover,

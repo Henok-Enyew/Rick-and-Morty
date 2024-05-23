@@ -29,7 +29,7 @@ const photos = [
     <div
       class="text-white w-4/5 absolute left-1/2 -translate-x-1/2 bg-primaryLight bg-opacity-30 backdrop-blur-xl h-4/5 border-t-2 border-l border-header rounded-xl grid grid-cols-2"
     >
-      <div class="py-8 pl-10 w-9/12">
+      <div v-motion-pop-visible class="py-8 pl-10 w-9/12">
         <swiper
           :loop="true"
           :navigation="true"
@@ -50,7 +50,7 @@ const photos = [
           </swiper-slide>
         </swiper>
       </div>
-      <div class="self-center pr-8">
+      <div class="self-center pr-8" v-motion-pop-visible>
         "Rick and Morty" follows the adventures of an eccentric scientist, Rick
         Sanchez, and his easily influenced grandson, Morty Smith, as they
         journey through alternate dimensions and bizarre galaxies. Fueled by

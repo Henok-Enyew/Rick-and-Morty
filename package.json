@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 10.161.165.51",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@apollo/client": "^3.10.4",
     "@vue/apollo-composable": "^4.0.2",
+    "@vueuse/motion": "^2.1.0",
+    "axios": "^1.7.2",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "swiper": "^11.1.3",

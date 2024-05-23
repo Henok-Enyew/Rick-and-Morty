@@ -8,7 +8,7 @@ import HomePage from "./components/Home/HomePage.vue";
 import LocationPage from "./components/LocationPage.vue";
 import CharacterPage from "./components/CharacterPage.vue";
 import EpisodePage from "./components/EpisodePage.vue";
-
+import { MotionPlugin } from "@vueuse/motion";
 const cache = new InMemoryCache();
 
 const apolloClient = new ApolloClient({
@@ -23,7 +23,7 @@ const routes = [
     name: "HomePage",
   },
   {
-    path: "/Location",
+    path: "/Location/:id",
     component: LocationPage,
     name: "LocationPage",
   },
@@ -40,7 +40,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes,
 });
 
@@ -51,5 +51,6 @@ const app = createApp({
 
   render: () => h(App),
 });
+app.use(MotionPlugin);
 app.use(router);
 app.mount("#app");

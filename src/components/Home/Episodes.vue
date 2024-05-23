@@ -81,12 +81,15 @@ const activeSeason = ref(1);
 <template>
   <div
     id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')] px-32 py-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')] px-32 py-8 max-lg:px-8"
   >
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
-    <div class="z-20 relative flex items-center w-4/5 gap-8 ml-32 mt-4">
+    <div
+      class="z-20 relative flex items-center w-4/5 gap-8 ml-32 mt-4 md:ml-8"
+      v-motion-slide-visible-bottom
+    >
       <div
-        class="text-gray-200 flex flex-col items-center bg-seasonBackground px-8 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
+        class="text-gray-200 flex flex-col md:text-sm items-center bg-seasonBackground px-8 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
         v-for="season in seasons"
         :key="season"
         :class="activeSeason == season[8] ? 'activeSeason' : ''"
@@ -110,7 +113,24 @@ const activeSeason = ref(1);
     <div
       class="text-white relative z-20 w-4/6 bg-episodesBackground h-120 ml-48 mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center gap-y-2"
     >
-      <p v-if="loading">Loading</p>
+      <!-- <p v-if="loading">Loading</p> -->
+      <div
+        v-if="loading"
+        class="z-200 relative h-full w-full flex items-center justify-center"
+      >
+        <svg
+          class="animate-spin z-20 relative w-72 h-72"
+          xmlns="http://www.w3.org/2000/svg"
+          width="64"
+          height="64"
+          fill="#fff"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
+          ></path>
+        </svg>
+      </div>
       <p v-if="error">{{ error.message }}</p>
       <!-- <p v-else>{{ result?.episodesByIds[0] }}</p> -->
       <div
@@ -124,6 +144,7 @@ const activeSeason = ref(1);
         <router-link
           class="bg-seasonBackground px-2 flex flex-col items-center w-72 rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
           :to="`/Episode/${episode.id}`"
+          v-motion-slide-visible-bottom
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

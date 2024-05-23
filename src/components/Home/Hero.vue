@@ -26,21 +26,33 @@
         >
       </div>
     </nav>
-    <div class="pl-16 pt-16">
-      <img src="../../assets/Images/Logo2.png" alt="" class="w-96" />
-      <div class="text-gray-400 flex gap-2 mt-3">
+    <div class="pl-16 pt-16 md:pt-4 md:pl-8">
+      <img
+        src="../../assets/Images/Logo2.png"
+        alt=""
+        class="w-96 md:w-64"
+        v-motion-slide-visible-top
+      />
+      <div
+        class="text-gray-400 flex gap-2 mt-3 md:mt-0 md:mt1 md:text-sm"
+        v-motion-slide-visible-top
+      >
         <p class="border border-forBorders rounded-3xl px-3">Animation</p>
         <p class="border border-forBorders rounded-3xl px-3">Adventure</p>
         <p class="border border-forBorders rounded-3xl px-3">Comedy</p>
       </div>
-      <p class="mt-2">
-        <span class="text-secondary ml-3 font-medium text-xl"
+      <p class="mt-2 md:mt-0" v-motion-slide-visible-top>
+        <span class="text-secondary ml-3 font-medium text-xl md:text-md"
           >IMDb Rating-</span
         >
-        <span class="text-gray-200 text-4xl"> 9.1 </span>
+        <span class="text-gray-200 text-4xl md:text-lg"> 9.1 </span>
       </p>
-      <div class="flex gap-3 ml-3 opacity-80">
+      <div
+        class="flex gap-3 md:gap-1 ml-3 opacity-80"
+        v-motion-slide-visible-top
+      >
         <svg
+          class="md:w-5 md:h-5"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -52,6 +64,7 @@
           ></path>
         </svg>
         <svg
+          class="md:w-5 md:h-5"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -63,6 +76,7 @@
           ></path>
         </svg>
         <svg
+          class="md:w-5 md:h-5"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -74,6 +88,7 @@
           ></path>
         </svg>
         <svg
+          class="md:w-5 md:h-5"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -85,6 +100,7 @@
           ></path>
         </svg>
         <svg
+          class="md:w-5 md:h-5"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -96,7 +112,7 @@
           ></path>
         </svg>
       </div>
-      <div class="mt-16 ml-3">
+      <div class="mt-16 ml-3 md:mt-1" v-motion-slide-visible-top>
         <p class="text-secondary font-thin">
           Creators:
           <span class="text-gray-200 ml-2">Dan Harmon, Justin Roiland</span>

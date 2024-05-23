@@ -3,122 +3,145 @@ import { ref } from "vue";
 import gql from "graphql-tag";
 import { useQuery } from "@vue/apollo-composable";
 
-// const Locations_Query = gql`
-//   query Episodes {
-//     episodesByIds(
-//       ids: [
-//         1
-//         2
-//         3
-//         4
-//         5
-//         6
-//         7
-//         8
-//         9
-//         10
-//         11
-//         12
-//         13
-//         14
-//         15
-//         16
-//         17
-//         18
-//         19
-//         20
-//         21
-//         22
-//         23
-//         24
-//         25
-//         26
-//         27
-//         28
-//         29
-//         30
-//         31
-//         32
-//         33
-//         34
-//         35
-//         36
-//         37
-//         38
-//         39
-//         40
-//         41
-//         42
-//         43
-//         44
-//         45
-//         46
-//         47
-//         48
-//         49
-//         50
-//         51
-//       ]
-//     ) {
-//       name
-//       id
-//       episode
-//     }
-//   }
-// `;
+const Locations_Query = gql`
+  query {
+    locationsByIds(
+      ids: [
+        1
+        2
+        3
+        4
+        5
+        6
+        7
+        8
+        9
+        10
+        11
+        12
+        13
+        14
+        15
+        16
+        17
+        18
+        19
+        20
+        21
+        22
+        23
+        24
+        25
+        26
+        27
+        28
+        29
+        30
+        31
+        32
+        33
+        34
+        35
+        36
+        37
+        38
+        39
+        40
+        41
+        42
+        43
+        44
+        45
+        46
+        47
+        48
+        49
+        50
+        51
+        52
+        53
+        54
+        55
+        56
+        57
+        58
+        59
+        60
+        61
+        62
+        63
+        64
+        65
+        66
+        67
+        68
+        69
+        70
+        71
+        72
+        73
+        74
+        75
+        76
+        77
+        78
+        79
+        80
+        81
+        82
+        83
+        84
+        85
+        86
+        87
+        88
+        89
+        90
+        91
+        92
+        93
+        94
+        95
+        96
+        97
+        98
+        99
+        100
+        101
+        102
+        103
+        104
+        105
+        106
+        107
+        108
+        109
+        110
+        111
+        112
+        113
+        114
+        115
+        116
+        117
+        118
+        119
+        120
+        121
+        122
+        123
+        124
+        125
+        126
+      ]
+    ) {
+      name
+      id
+    }
+  }
+`;
 
-// const { result, loading, error } = useQuery(Episodes_Query);
-
-const locations = [
-  {
-    name: "Earth",
-    id: 1,
-  },
-  {
-    name: "Abadango",
-    id: 2,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 3,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 4,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 5,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 6,
-  },
-  {
-    name: "Earth",
-    id: 7,
-  },
-  {
-    name: "Abadango",
-    id: 8,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 9,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 10,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 11,
-  },
-  {
-    name: "Citidal of rocks",
-    id: 12,
-  },
-];
+const { result, loading, error } = useQuery(Locations_Query);
 </script>
 <template>
   <div
@@ -127,11 +150,38 @@ const locations = [
   >
     <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
     <div
-      class="text-white relative z-20 w-11/12 bg-locationsBackground h-128 mt-4 ml-12 rounded-md border-t border-l border-locations grid grid-cols-2 px-16 py-8 justify-center gap-y-2"
+      class="text-white relative z-20 w-11/12 bg-locationsBackground h-128 mt-4 ml-12 rounded-md border-t border-l border-locations grid grid-cols-2 px-16 py-8 justify-center gap-y-2 overflow-auto"
     >
-      <div v-for="location in locations" :key="location.id" class="">
+      <!-- <p v-if="loading">Loading</p> -->
+      <div
+        v-if="loading"
+        class="z-200 relative h-full w-full flex items-center justify-center"
+      >
+        <svg
+          class="animate-spin z-20 relative w-72 h-72"
+          xmlns="http://www.w3.org/2000/svg"
+          width="64"
+          height="64"
+          fill="#fff"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
+          ></path>
+        </svg>
+      </div>
+      <p v-if="error">{{ error.message }}</p>
+      <!-- <p v-else>{{ result?.locationsByIds[0] }}</p> -->
+
+      <div
+        v-else
+        v-for="location in result?.locationsByIds"
+        :key="location.id"
+        class=""
+      >
         <router-link
-          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-72 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
+          v-motion-slide-visible-bottom
+          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
           :to="`/Location/${location.id}`"
         >
           <svg
@@ -152,41 +202,6 @@ const locations = [
           </p>
         </router-link>
       </div>
-
-      <!-- <p v-if="loading">Loading</p>
-      <p v-if="error">{{ error.message }}</p>
-      <p v-else>{{ result?.episodesByIds[0] }}</p>
-      <div
-        v-else
-        v-for="episode in result?.episodesByIds.filter(
-          (arr) => arr.episode[2] == activeSeason
-        )"
-        :key="episode"
-        class=""
-      >
-        <router-link
-          class="bg-seasonBackground px-2 flex flex-col items-center w-72 rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
-          :to="`/Location/${Loaction.id}`"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            fill="#fff"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M216,104H102.09L210,75.51a8,8,0,0,0,5.68-9.84l-8.16-30a15.93,15.93,0,0,0-19.42-11.13L35.81,64.74a15.75,15.75,0,0,0-9.7,7.4,15.51,15.51,0,0,0-1.55,12L32,111.56c0,.14,0,.29,0,.44v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,216,104ZM192.16,40l6,22.07-22.62,6L147.42,51.83Zm-66.69,17.6,28.12,16.24-36.94,9.75L88.53,67.37Zm-79.4,44.62-6-22.08,26.5-7L94.69,89.4ZM208,200H48V120H208v80Z"
-            ></path>
-          </svg>
-          <p class="-mt-1">
-            {{ episode.episode }}
-          </p>
-          <p class="-mt-2 text-xs">
-            {{ episode.name }}
-          </p>
-        </router-link>
-      </div> -->
     </div>
   </div>
 </template>
@@ -199,9 +214,3 @@ const locations = [
   /* color: #e0bb3767; */
 }
 </style>
-<!--
-  Season
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M232,216H183.36A103.95,103.95,0,1,0,128,232H232a8,8,0,0,0,0-16ZM40,128a88,88,0,1,1,88,88A88.1,88.1,0,0,1,40,128Zm88-24a24,24,0,1,0-24-24A24,24,0,0,0,128,104Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,128,72Zm24,104a24,24,0,1,0-24,24A24,24,0,0,0,152,176Zm-32,0a8,8,0,1,1,8,8A8,8,0,0,1,120,176Zm56-24a24,24,0,1,0-24-24A24,24,0,0,0,176,152Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,176,120ZM80,104a24,24,0,1,0,24,24A24,24,0,0,0,80,104Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,80,136Z"></path></svg>
-
-Episodes
-  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M216,104H102.09L210,75.51a8,8,0,0,0,5.68-9.84l-8.16-30a15.93,15.93,0,0,0-19.42-11.13L35.81,64.74a15.75,15.75,0,0,0-9.7,7.4,15.51,15.51,0,0,0-1.55,12L32,111.56c0,.14,0,.29,0,.44v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,216,104ZM192.16,40l6,22.07-22.62,6L147.42,51.83Zm-66.69,17.6,28.12,16.24-36.94,9.75L88.53,67.37Zm-79.4,44.62-6-22.08,26.5-7L94.69,89.4ZM208,200H48V120H208v80Z"></path></svg> -->

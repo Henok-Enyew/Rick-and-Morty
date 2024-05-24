@@ -1,36 +1,17 @@
 <script setup>
-import { ref } from "vue";
-import gql from "graphql-tag";
 import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
-
+import { Character_Query } from "../queries/characterQuery";
 const route = useRoute();
 const id = route.params.id;
 
-console.log(route.params.id);
-const Character_Query = gql`
-
-query{  character(id: ${id}){
-    name
-    status
-    species
-    gender
-    location{
-      name
-      id
-    }
-    image
-    episode{
-      name
-      id
-      air_date
-      episode
-      created
-    }
-  }}
-`;
-const { result, loading, error } = useQuery(Character_Query);
-console.log(result);
+const { result, loading, error } = useQuery(
+  Character_Query,
+  {},
+  {
+    variables: { id: id },
+  }
+);
 </script>
 <template>
   <div
@@ -61,7 +42,7 @@ console.log(result);
         ></path>
       </svg>
     </div>
-    <p v-if="error">{{ error.message }}</p>
+    <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
     <div
       v-else
       class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8"

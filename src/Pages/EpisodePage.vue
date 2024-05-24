@@ -1,33 +1,22 @@
 <script setup>
 import { ref } from "vue";
-import gql from "graphql-tag";
 import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
-
+import { Episode_Query } from "../queries/episodeQuery";
 const route = useRoute();
 const id = route.params.id;
 
-const Episode_Query = gql`query{  episode(id: ${id}){
-    name
-    air_date
-    episode
-    created
-    characters{
-      name
-      id
-      status
-      species
-      gender
-      image
-    }
-  }}
-`;
-const { result, loading, error } = useQuery(Episode_Query);
-// console.log(result);
+const { result, loading, error } = useQuery(
+  Episode_Query,
+  {},
+  {
+    variables: { id: id },
+  }
+);
 </script>
 <template>
   <div
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')]"
+    class="relative z-0 background-container bg-primary w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] overflow-hidden"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">
@@ -54,7 +43,7 @@ const { result, loading, error } = useQuery(Episode_Query);
         ></path>
       </svg>
     </div>
-    <p v-if="error">{{ error.message }}</p>
+    <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
 
     <div
       v-else

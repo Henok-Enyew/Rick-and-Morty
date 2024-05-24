@@ -1,38 +1,22 @@
 <script setup>
 import { ref } from "vue";
-import gql from "graphql-tag";
 import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
-
+import { Location_Query } from "../queries/locationQuery";
 const route = useRoute();
 const id = route.params.id;
 
-console.log(route.params.id);
-const Location_Query = gql`
-
-query{location(id: ${id}){
-  name
-  id
-  dimension
-  type
-  created
-  residents{
-    id
-    image
-    name 
-    status
-    gender
-    species
+const { result, loading, error } = useQuery(
+  Location_Query,
+  {},
+  {
+    variables: { id: id },
   }
-
-}}
-`;
-const { result, loading, error } = useQuery(Location_Query);
-// console.log(result);
+);
 </script>
 <template>
   <div
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')]"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] overflow-hidden"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">
@@ -60,7 +44,7 @@ const { result, loading, error } = useQuery(Location_Query);
         ></path>
       </svg>
     </div>
-    <p v-if="error">{{ error.message }}</p>
+    <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
 
     <div
       v-else

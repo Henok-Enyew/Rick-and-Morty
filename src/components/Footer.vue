@@ -12,7 +12,7 @@
         >Figma Design</a
       > -->
       <a
-        href=""
+        href="https://www.figma.com/design/ZSVmfKMGibjB1y3a2mzXWg/Home-Page-of-the-Rick-and-Morty-Website?node-id=0-1&t=cFiTbdoqk9C7olcl-1"
         target="_blank"
         class="hover:scale-110 transition-all duration-300"
       >
@@ -29,7 +29,7 @@
         </svg>
       </a>
       <a
-        href=""
+        href="https://github.com/Henok-Enyew"
         target="_blank"
         class="hover:scale-110 transition-all duration-300"
       >

@@ -45,7 +45,6 @@
       </a>
     </p>
     <p
-      v-motion-slide-visible-top
       class="text-white w-full flex justify-center items-center gap-1 mt-1 text-sm"
     >
       Made with

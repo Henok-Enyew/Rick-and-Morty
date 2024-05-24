@@ -34,7 +34,7 @@ console.log(result);
 </script>
 <template>
   <div
-    class="relative z-0 bg-primary background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Character-background.png')] overflow-hidden"
+    class="relative z-0 bg-primary background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://e1.pxfuel.com/desktop-wallpaper/976/559/desktop-wallpaper-rick-and-morty-live-rick-and-morty-thumbnail.jpg')] overflow-hidden"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">

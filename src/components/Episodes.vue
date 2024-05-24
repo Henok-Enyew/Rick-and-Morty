@@ -81,7 +81,7 @@ const activeSeason = ref(1);
 <template>
   <div
     id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')] px-32 py-8 lg:px-8 md:px-2"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-32 py-8 lg:px-8 md:px-2"
   >
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
     <div

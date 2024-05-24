@@ -4,10 +4,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import { DefaultApolloClient } from "@vue/apollo-composable";
 import { ApolloClient, InMemoryCache } from "@apollo/client/core";
 import App from "./App.vue";
-import HomePage from "./components/Home/HomePage.vue";
-import LocationPage from "./components/LocationPage.vue";
-import CharacterPage from "./components/CharacterPage.vue";
-import EpisodePage from "./components/EpisodePage.vue";
+import HomePage from "./Pages/HomePage.vue";
+import LocationPage from "./Pages/LocationPage.vue";
+import CharacterPage from "./Pages/CharacterPage.vue";
+import EpisodePage from "./Pages/EpisodePage.vue";
 import { MotionPlugin } from "@vueuse/motion";
 const cache = new InMemoryCache();
 

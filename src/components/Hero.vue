@@ -1,13 +1,13 @@
 <script setup></script>
 <template>
   <div
-    class="w-full bg-cover bg-right-bottom h-screen bg-[url('src/assets/Images/Hero.jpg')] bg-opacity-50"
+    class="w-full bg-cover bg-right-bottom h-screen bg-[url('https://i.pinimg.com/originals/0d/53/3a/0d533a8327df5569e02aba4fd3497461.jpg')] bg-opacity-50"
   >
     <!-- class="w-full bg-cover bg-right-bottom h-screen bg-[url('https://i.pinimg.com/originals/0d/53/3a/0d533a8327df5569e02aba4fd3497461.jpg')] bg-gradient-to-br from-primary to-transparent"></div>  -->
 
     <nav class="flex justify-between items-center px-3 py-1">
       <img
-        src="../../assets/Images/Logo.png"
+        src="../assets/Images/Logo.png"
         alt="Logo"
         class="h-12 w-14 rounded-full"
       />
@@ -28,7 +28,7 @@
     </nav>
     <div class="pl-16 pt-16 lg:pt-4 lg:pl-20">
       <img
-        src="../../assets/Images/Logo2.png"
+        src="../assets/Images/Logo2.png"
         alt=""
         class="w-96"
         v-motion-slide-visible-top

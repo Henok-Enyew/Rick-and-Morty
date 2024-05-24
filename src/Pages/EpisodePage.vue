@@ -27,7 +27,7 @@ const { result, loading, error } = useQuery(Episode_Query);
 </script>
 <template>
   <div
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Episodes-background.jpg')]"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')]"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">

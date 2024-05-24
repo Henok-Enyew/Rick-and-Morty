@@ -21,7 +21,7 @@ const photos = [
     id="about"
   >
     <img
-      src="../../assets/Images/Portal.png"
+      src="../assets/Images/Portal.png"
       alt=""
       class="absolute w-2/5 -right-16 top-1/2 -translate-y-1/2 opacity-95 lg:h-4/6 lg:w-3/5 lg:-right-28"
     />

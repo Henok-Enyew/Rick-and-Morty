@@ -5,7 +5,7 @@ const { result, loading, error } = useQuery(Characters_Query);
 </script>
 <template>
   <div
-    class="w-full h-screen bg-primary text-white px-20 lg:px-8 pt-8"
+    class="w-full h-screen bg-primary text-white px-20 lg:px-8 pt-8 xl:px-8"
     id="characters"
   >
     <p class="text-header text-3xl z-20 relative mb-4">Characters (100)</p>

@@ -17,14 +17,14 @@ const activeSeason = ref(1);
 <template>
   <div
     id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-32 py-8 lg:px-8 md:px-2"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-20 py-8 lg:px-8 md:px-2"
   >
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
     <div
-      class="z-20 relative flex items-center w-4/5 lg:w-11/12 md:w-11/12 gap-8 ml-32 mt-4 lg:ml-8 md:ml-1"
+      class="z-20 relative flex items-center w-11/12 xl:w-full lg:w-10/12 md:w-11/12 gap-8 mx-auto mt-4 md:ml-1"
     >
       <div
-        class="text-gray-200 flex flex-col lg:text-sm md:text-xs items-center bg-seasonBackground px-8 lg:px-4 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
+        class="w-48 text-gray-200 flex flex-col lg:text-sm md:text-xs items-center bg-seasonBackground px-8 lg:px-4 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
         v-for="season in seasons"
         :key="season"
         :class="activeSeason == season[8] ? 'activeSeason' : ''"
@@ -47,7 +47,7 @@ const activeSeason = ref(1);
       </div>
     </div>
     <div
-      class="text-white relative z-20 w-4/6 lg:w-11/12 md:w-11/12 lg:ml-16 bg-episodesBackground h-120 ml-48 mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center gap-y-2"
+      class="text-white relative z-20 w-5/6 lg:w-11/12 md:w-11/12 bg-episodesBackground h-120 mx-auto mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center items-center gap-y-2 gap-x-16"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -68,7 +68,6 @@ const activeSeason = ref(1);
         </svg>
       </div>
       <p v-if="error">{{ error.message }}</p>
-      <!-- <p v-else>{{ result?.episodesByIds[0] }}</p> -->
       <div
         v-else
         v-for="episode in result?.episodesByIds.filter(

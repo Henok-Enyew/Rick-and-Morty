@@ -2,7 +2,7 @@
 import { SwiperSlide, Swiper } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, Autoplay, Mousewheel } from "swiper/modules";
+import { Navigation, Autoplay, Mousewheel, Pagination } from "swiper/modules";
 
 const modules = [Navigation, Autoplay, Mousewheel];
 
@@ -49,13 +49,13 @@ const photos = [
             disableOnInteraction: false,
           }"
           :mousewheel="true"
-          class="mySwiper"
+          class="mySwiper w-96"
         >
-          <swiper-slide v-for="photo in photos" :key="photo">
+          <swiper-slide v-for="photo in photos" :key="photo" class="">
             <img
               :src="`${photo}`"
               alt="photo"
-              class="w-72 !opacity-100 h-128 ml-8 lg:w-60 lg:h-96"
+              class="w-72 mx-auto !opacity-100 h-128 lg:w-60 lg:h-96"
             />
             <!-- <img
               :src="`src/assets/Images/Carousel/${photo}`"
@@ -82,7 +82,7 @@ const photos = [
 </template>
 <style>
 .swiper-button-prev {
-  @apply left-0 !opacity-100;
+  @apply left-3 !opacity-100;
 }
 
 .swiper-button-next {

@@ -62,7 +62,7 @@ const { result, loading, error } = useQuery(
           </div>
           <p class="mt-1">Last known location</p>
           <router-link
-            class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 lg:w-72 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
+            class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 xl:w-80 lg:w-72 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
             :to="`/Location/${result?.character.location.id}`"
           >
             <svg
@@ -91,7 +91,7 @@ const { result, loading, error } = useQuery(
           Episodes {{ result?.character.name.split(" ")[0] }} has participated
         </p>
         <div
-          class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll lg:grid-cols-1 lg:justify-center"
+          class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll xl:grid-cols-1 lg:grid-cols-1 lg:justify-center"
         >
           <div
             v-for="episode in result?.character.episode"
@@ -99,7 +99,7 @@ const { result, loading, error } = useQuery(
             class=""
           >
             <router-link
-              class="bg-seasonBackground px-2 flex flex-col items-center w-72 lg:w-96 rounded-full border-t border-l border-gray-400 hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
+              class="bg-seasonBackground px-2 flex flex-col items-center w-72 xl:w-full lg:w-96 rounded-full border-t border-l border-gray-400 hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
               :to="`/Episode/${episode.id}`"
             >
               <svg
@@ -160,7 +160,7 @@ const { result, loading, error } = useQuery(
           </svg>
         </a>
         <a
-          href="https://github.com/Henok-Enyew"
+          href="https://github.com/Henok-Enyew/Rick-and-Morty"
           target="_blank"
           class="hover:scale-110 transition-all duration-300"
         >

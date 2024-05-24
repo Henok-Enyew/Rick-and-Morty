@@ -74,7 +74,7 @@ const { result, loading, error } = useQuery(
             v-for="resident in result?.location.residents"
             :key="resident.id"
             :to="`/Character/${resident.id}`"
-            class="w-48 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
+            class="w-48 xl:w-40 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
           >
             <img
               :src="resident.image"
@@ -113,7 +113,7 @@ const { result, loading, error } = useQuery(
           </svg>
         </a>
         <a
-          href="https://github.com/Henok-Enyew"
+          href="https://github.com/Henok-Enyew/Rick-and-Morty"
           target="_blank"
           class="hover:scale-110 transition-all duration-300"
         >

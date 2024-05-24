@@ -8,7 +8,7 @@ const { result, loading, error } = useQuery(Locations_Query);
 <template>
   <div
     id="locations"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 py-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 xl:px-8 py-8"
   >
     <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
     <div
@@ -43,7 +43,7 @@ const { result, loading, error } = useQuery(Locations_Query);
       >
         <router-link
           v-motion-slide-visible-bottom
-          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
+          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 xl:w-80 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
           :to="`/Location/${location.id}`"
         >
           <svg

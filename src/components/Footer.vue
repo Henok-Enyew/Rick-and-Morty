@@ -26,7 +26,7 @@
         </svg>
       </a>
       <a
-        href="https://github.com/Henok-Enyew"
+        href="https://github.com/Henok-Enyew/Rick-and-Morty"
         target="_blank"
         class="hover:scale-110 transition-all duration-300"
       >
@@ -67,6 +67,7 @@
         class="border-b border-transparent hover:border-white transition-all duration-200"
         >Henok
       </a>
+      &copy; {{ new Date().getFullYear() }}
     </p>
   </footer>
 </template>

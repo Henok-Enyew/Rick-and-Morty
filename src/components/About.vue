@@ -7,13 +7,23 @@ import { Navigation, Autoplay, Mousewheel } from "swiper/modules";
 const modules = [Navigation, Autoplay, Mousewheel];
 
 const photos = [
-  "Rick and Morty-1.jpg",
-  "Rick and Morty-2.jpg",
-  "Rick and Morty-3.jpg",
-  "Rick and Morty-4.jpg",
-  "Rick and Morty-5.jpg",
-  "Rick and Morty-6.jpg",
+  "https://i.pinimg.com/564x/22/54/c5/2254c5d6a60c3373096d1e1d9248612f.jpg",
+  "https://i.pinimg.com/564x/f2/83/6c/f2836c465d821c92b5267faa7daaefb2.jpg",
+  "https://i.pinimg.com/564x/fa/5f/d1/fa5fd1957d475692ea4fc01a5acd0487.jpg",
+  "https://i.pinimg.com/564x/13/44/0c/13440cc8bfd3425b044e82c8cc2c696a.jpg",
+  "https://i.pinimg.com/564x/de/06/c3/de06c312d9dbf6f6e87dc9d77a122210.jpg",
+  "https://i.pinimg.com/564x/b0/a4/de/b0a4de7caeb162b485e169078df2b53c.jpg",
+  "https://i.pinimg.com/564x/c3/8b/70/c38b70817258087e874eea09b8a926a3.jpg",
+  "https://i.pinimg.com/736x/52/df/77/52df7712b50f08b8174e25dec1415330.jpg",
 ];
+// const photos = [
+//   "Rick and Morty-1.jpg",
+//   "Rick and Morty-2.jpg",
+//   "Rick and Morty-3.jpg",
+//   "Rick and Morty-4.jpg",
+//   "Rick and Morty-5.jpg",
+//   "Rick and Morty-6.jpg",
+// ];
 </script>
 <template>
   <div
@@ -43,10 +53,15 @@ const photos = [
         >
           <swiper-slide v-for="photo in photos" :key="photo">
             <img
-              :src="`src/assets/Images/Carousel/${photo}`"
+              :src="`${photo}`"
               alt="photo"
               class="w-72 !opacity-100 h-128 ml-8 lg:w-60 lg:h-96"
             />
+            <!-- <img
+              :src="`src/assets/Images/Carousel/${photo}`"
+              alt="photo"
+              class="w-72 !opacity-100 h-128 ml-8 lg:w-60 lg:h-96"
+            /> -->
           </swiper-slide>
         </swiper>
       </div>

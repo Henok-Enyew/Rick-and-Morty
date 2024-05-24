@@ -146,7 +146,7 @@ const { result, loading, error } = useQuery(Locations_Query);
 <template>
   <div
     id="locations"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('src/assets/Images/Locations-background.jpg')] px-32 lg:px-8 py-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 py-8"
   >
     <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
     <div

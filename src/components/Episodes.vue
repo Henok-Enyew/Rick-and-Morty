@@ -22,7 +22,6 @@ const activeSeason = ref(1);
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
     <div
       class="z-20 relative flex items-center w-4/5 lg:w-11/12 md:w-11/12 gap-8 ml-32 mt-4 lg:ml-8 md:ml-1"
-      v-motion-slide-visible-bottom
     >
       <div
         class="text-gray-200 flex flex-col lg:text-sm md:text-xs items-center bg-seasonBackground px-8 lg:px-4 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"

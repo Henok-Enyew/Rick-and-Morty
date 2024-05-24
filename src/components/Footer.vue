@@ -1,10 +1,7 @@
 <script setup></script>
 <template>
   <footer class="h-24 bg-locationBtnActive w-full py-4">
-    <p
-      class="w-full flex justify-center items-center gap-6"
-      v-motion-slide-visible-top
-    >
+    <p class="w-full flex justify-center items-center gap-6">
       <!-- <a
         href=""
         target="_blank"

@@ -8,11 +8,11 @@ const { result, loading, error } = useQuery(Locations_Query);
 <template>
   <div
     id="locations"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 xl:px-8 py-8"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 xl:px-8 py-8 md:px-1"
   >
     <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
     <div
-      class="text-white relative z-20 w-11/12 bg-locationsBackground h-128 mt-4 ml-12 rounded-md border-t border-l border-locations grid grid-cols-2 px-16 lg:px-4 py-8 gap-y-2 overflow-auto"
+      class="text-white relative z-20 w-11/12 md:w-full bg-locationsBackground h-128 md:h-148 mt-4 ml-12 md:ml-0 rounded-md border-t border-l border-locations grid grid-cols-2 md:grid-cols-1 px-16 lg:px-4 md:px-2 py-8 gap-y-2 overflow-auto"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -33,7 +33,6 @@ const { result, loading, error } = useQuery(Locations_Query);
         </svg>
       </div>
       <p v-if="error">{{ error.message }}</p>
-      <!-- <p v-else>{{ result?.locationsByIds[0] }}</p> -->
 
       <div
         v-else
@@ -42,8 +41,8 @@ const { result, loading, error } = useQuery(Locations_Query);
         class=""
       >
         <router-link
-          v-motion-slide-visible-bottom
-          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 xl:w-80 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
+          v-motion-pop-visible
+          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 md:w-64 xl:w-80 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
           :to="`/Location/${location.id}`"
         >
           <svg

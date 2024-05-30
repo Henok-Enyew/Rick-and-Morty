@@ -4,31 +4,25 @@ import { useQuery } from "@vue/apollo-composable";
 import { Episodes_Query } from "../queries/listEpisodesQuery";
 
 const { result, loading, error } = useQuery(Episodes_Query);
-const seasons = [
-  "Season 01",
-  "Season 02",
-  "Season 03",
-  "Season 04",
-  "Season 05",
-];
+const seasons = ["Season 1", "Season 2", "Season 3", "Season 4", "Season 5"];
 
 const activeSeason = ref(1);
 </script>
 <template>
   <div
     id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-20 py-8 lg:px-8 md:px-2"
+    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-20 py-4 lg:px-8 md:px-2"
   >
     <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
     <div
-      class="z-20 relative flex items-center w-11/12 xl:w-full lg:w-10/12 md:w-11/12 gap-8 mx-auto mt-4 md:ml-1"
+      class="z-20 relative flex items-center w-11/12 xl:w-full lg:w-10/12 md:w-11/12 gap-8 mx-auto mt-4 md:ml-1 md:gap-1"
     >
       <div
-        class="w-48 text-gray-200 flex flex-col lg:text-sm md:text-xs items-center bg-seasonBackground px-8 lg:px-4 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
+        class="w-48 text-gray-200 flex flex-col lg:text-xs lg:px-4 md:text-xs items-center bg-seasonBackground px-8 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
         v-for="season in seasons"
         :key="season"
-        :class="activeSeason == season[8] ? 'activeSeason' : ''"
-        @click="activeSeason = season[8]"
+        :class="activeSeason == season[7] ? 'activeSeason' : ''"
+        @click="activeSeason = season[7]"
       >
         <svg
           class="md:w-18 md:h-18"
@@ -43,11 +37,11 @@ const activeSeason = ref(1);
           ></path>
         </svg>
 
-        <p class="-mt-1">{{ season }}</p>
+        <p class="-mt-1 md:mt-0">{{ season }}</p>
       </div>
     </div>
     <div
-      class="text-white relative z-20 w-5/6 lg:w-11/12 md:w-11/12 bg-episodesBackground h-120 mx-auto mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center items-center gap-y-2 gap-x-16"
+      class="text-white relative z-20 w-5/6 lg:w-11/12 md:w-11/12 bg-episodesBackground h-120 md:h-144 mx-auto mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center items-center gap-y-2 md:gap-y-4 gap-x-16 md:grid-cols-1 md:px-4 md:py-2 md:items-stretch overflow-scroll"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -77,9 +71,9 @@ const activeSeason = ref(1);
         class=""
       >
         <router-link
+          v-motion-pop-visible
           class="bg-seasonBackground px-2 flex flex-col items-center w-72 lg:w-64 lg:text-sm rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
           :to="`/Episode/${episode.id}`"
-          v-motion-slide-visible-bottom
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

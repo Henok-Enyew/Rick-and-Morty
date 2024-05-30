@@ -33,13 +33,16 @@ const photos = [
     <img
       src="../assets/Images/Portal.png"
       alt=""
-      class="absolute w-2/5 -right-16 top-1/2 -translate-y-1/2 opacity-95 lg:h-4/6 lg:w-3/5 lg:-right-28"
+      class="absolute w-2/5 -right-16 top-1/2 -translate-y-1/2 opacity-95 lg:h-4/6 lg:w-3/5 lg:-right-28 md:h-4/6 md:w-3/5 md:-right-20"
     />
     <p class="text-header text-3xl mt-12 mb-4">About</p>
     <div
-      class="text-white w-4/5 absolute left-1/2 -translate-x-1/2 bg-primaryLight bg-opacity-30 backdrop-blur-xl h-4/5 border-t-2 border-l border-header rounded-xl grid grid-cols-2 items-center lg:grid-cols-1 lg:items-center lg:px-16 lg:overflow-y-scroll"
+      class="text-white w-4/5 md:w-11/12 absolute left-1/2 -translate-x-1/2 bg-primaryLight bg-opacity-30 backdrop-blur-xl h-4/5 border-t-2 border-l border-header rounded-xl grid grid-cols-2 items-center lg:grid-cols-1 lg:items-center lg:px-16 lg:overflow-y-scroll md:grid-cols-1 md:items-center md:mx-auto md:px-3 md:overflow-y-scroll"
     >
-      <div v-motion-pop-visible class="py-8 pl-10 w-9/12">
+      <div
+        v-motion-pop-visible
+        class="py-8 pl-10 w-9/12 md:w-72 md:pl-2 md:mx-auto"
+      >
         <swiper
           :loop="true"
           :navigation="true"
@@ -49,13 +52,13 @@ const photos = [
             disableOnInteraction: false,
           }"
           :mousewheel="true"
-          class="mySwiper w-96"
+          class="mySwiper w-96 md:w-72"
         >
           <swiper-slide v-for="photo in photos" :key="photo" class="">
             <img
               :src="`${photo}`"
               alt="photo"
-              class="w-72 mx-auto !opacity-100 h-128 lg:w-60 lg:h-96"
+              class="w-72 mx-auto !opacity-100 h-128 lg:w-60 lg:h-96 md:w-56 md:h-96"
             />
             <!-- <img
               :src="`src/assets/Images/Carousel/${photo}`"
@@ -65,7 +68,10 @@ const photos = [
           </swiper-slide>
         </swiper>
       </div>
-      <div class="self-center pr-8 lg:text-md" v-motion-pop-visible>
+      <div
+      class="self-center pr-8 lg:text-md md:mx-auto md:pr-2"
+      v-motion-pop-visible
+      >
         "Rick and Morty" follows the adventures of an eccentric scientist, Rick
         Sanchez, and his easily influenced grandson, Morty Smith, as they
         journey through alternate dimensions and bizarre galaxies. Fueled by
@@ -82,11 +88,11 @@ const photos = [
 </template>
 <style>
 .swiper-button-prev {
-  @apply left-3 !opacity-100;
+  @apply left-3 !opacity-100 md:left-1;
 }
 
 .swiper-button-next {
-  @apply right-3;
+  @apply right-3 md:right-1;
 }
 
 .swiper-button-prev,

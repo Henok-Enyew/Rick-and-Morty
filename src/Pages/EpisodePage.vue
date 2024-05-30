@@ -16,7 +16,7 @@ const { result, loading, error } = useQuery(
 </script>
 <template>
   <div
-    class="relative z-0 background-container bg-primary w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] overflow-hidden"
+    class="relative z-0 background-container bg-primary w-full h-screen md:min-h-screen md:h-fit bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] overflow-hidden"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">
@@ -47,9 +47,9 @@ const { result, loading, error } = useQuery(
 
     <div
       v-else
-      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 py-1"
+      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 py-1 md:px-4 md:flex-col"
     >
-      <div class="w-5/12 py-16">
+      <div class="w-5/12 md:w-11/12 py-16 md:py-2">
         <p class="text-6xl">{{ result?.episode.episode }}</p>
         <p class="text-2xl font-thin mb-4">{{ result?.episode.name }}</p>
         <p class="flex items-end gap-3 font-thin">
@@ -90,15 +90,17 @@ const { result, loading, error } = useQuery(
         </p>
       </div>
       <div
-        class="border-t border-l border-gray-400 rounded-lg py-3 px-2 h-144 overflow-hidden"
+        class="border-t border-l border-gray-400 md:w-4/5 rounded-lg py-3 px-2 h-144 overflow-hidden"
       >
-        <p class="text-xl mb-2">Characters in the Episode</p>
-        <div class="grid grid-cols-3 gap-4 px-2 h-128 overflow-y-scroll">
+        <p class="text-xl mb-2 md:text-md">Characters in the Episode</p>
+        <div
+          class="grid grid-cols-3 md:grid-cols-1 gap-4 px-2 h-128 overflow-y-scroll"
+        >
           <router-link
             v-for="character in result?.episode.characters"
             :key="character.id"
             :to="`/Character/${character.id}`"
-            class="w-48 xl:w-40 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
+            class="w-48 xl:w-40 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1 mx-auto"
           >
             <img
               :src="character.image"
@@ -116,7 +118,7 @@ const { result, loading, error } = useQuery(
       </div>
     </div>
     <footer
-      class="h-12 bg-w-light w-full z-20 absolute bottom-0 flex justify-center gap-7"
+      class="h-12 bg-w-light w-full z-20 absolute md:relative bottom-0 flex justify-center gap-7"
     >
       <p class="flex justify-center items-center gap-2 text-gray-300">
         <a

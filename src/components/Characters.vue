@@ -11,7 +11,7 @@ const { result, loading, error } = useQuery(Characters_Query);
     <p class="text-header text-3xl z-20 relative mb-4">Characters (100)</p>
 
     <div
-      class="grid grid-cols-5 gap-4 bg-charactersBg px-8 py-4 overflow-y-scroll w-11/12 h-144 ml-8 lg:ml-4 rounded-md"
+      class="grid grid-cols-5 gap-4 bg-charactersBg px-8 py-4 overflow-y-scroll w-11/12 h-144 md:h-152 ml-8 lg:ml-4 rounded-md md:grid-cols-1 md:px-0 md:ml-0 md:mx-auto"
     >
       <!-- <p v-if="loading">Loading</p> -->
       <div
@@ -37,12 +37,16 @@ const { result, loading, error } = useQuery(Characters_Query);
       <router-link
         v-motion-slide-visible-bottom
         v-else
-        class="bg-secondary40 w-40 lg:w-32 pb-1 hover:bg-secondary40Active border border-transparent hover:border-white transition-all duration-300 transform hover:rotate-3 hover:scale-105"
+        class="bg-secondary40 w-40 lg:w-32 md:w-60 pb-1 hover:bg-secondary40Active border border-transparent hover:border-white transition-all duration-300 transform hover:rotate-3 hover:scale-105 md:mx-auto"
         v-for="character in result?.charactersByIds"
         :key="character"
         :to="`Character/${character.id}`"
       >
-        <img :src="character.image" :alt="character.name" class="w-40 mb-3" />
+        <img
+          :src="character.image"
+          :alt="character.name"
+          class="w-40 mb-3 md:w-60"
+        />
         <p class="flex items-center justify-center text-sm">
           <span class="mr-2"
             ><svg

@@ -48,9 +48,9 @@ const { result, loading, error } = useQuery(
 
     <div
       v-else
-      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 py-1"
+      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 md:px-4 md:flex-col py-1"
     >
-      <div class="w-5/12 py-16">
+      <div class="w-5/12 py-16 md:w-11/12 md:py-3">
         <p class="text-4xl">{{ result?.location.name }}</p>
         <p>Dimension: {{ result?.location.dimension }}</p>
         <p>Type: {{ result?.location.type }}</p>
@@ -66,15 +66,17 @@ const { result, loading, error } = useQuery(
         </p>
       </div>
       <div
-        class="border-t border-l border-gray-400 rounded-lg py-3 px-2 h-144 overflow-hidden"
+        class="border-t border-l border-gray-400 rounded-lg py-3 px-2 h-144 md:h-120 overflow-hidden md:w-8/12"
       >
         <p class="text-2xl mb-2">Residents</p>
-        <div class="grid grid-cols-3 gap-4 px-2 h-128 overflow-y-scroll">
+        <div
+          class="grid grid-cols-3 md:grid-cols-1 gap-4 md:gap-1 px-2 h-128 overflow-y-scroll"
+        >
           <router-link
             v-for="resident in result?.location.residents"
             :key="resident.id"
             :to="`/Character/${resident.id}`"
-            class="w-48 xl:w-40 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
+            class="w-48 xl:w-40 lg:w-36 max-h-72 md:mx-auto bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
           >
             <img
               :src="resident.image"

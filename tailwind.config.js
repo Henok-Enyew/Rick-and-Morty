@@ -42,6 +42,7 @@ export default {
     extend: {
       colors: {
         primary: "#121C0E",
+        primary80: "#121c0ed8",
         primaryLight: "#172312",
         forBorders: "#2D4523",
         secondary: "#51D928",
@@ -59,6 +60,9 @@ export default {
         locationBtn: "#e0bb3741",
         locationBtnActive: "#e0bb3767",
       },
+      width: {
+        xxs: "0.7rem",
+      },
       height: {
         120: "28rem",
         128: "30rem",
@@ -75,10 +79,11 @@ export default {
           "100%": { transform: "rotate(360deg)" },
         },
       },
+
       screens: {
         "2xl": { max: "1535px" }, // <= 1535px
         xl: { max: "1279px" }, // <= 1279px
-        lg: { max: "1023px" }, // <= 1023px
+        lg: { min: "768", max: "1023px" }, // <= 1023px
         md: { max: "767px" }, // <= 767px
         sm: { max: "639px" }, // <= 639px
       },

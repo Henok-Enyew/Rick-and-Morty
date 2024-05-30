@@ -15,7 +15,7 @@ const { result, loading, error } = useQuery(
 </script>
 <template>
   <div
-    class="relative z-0 bg-primary background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://e1.pxfuel.com/desktop-wallpaper/976/559/desktop-wallpaper-rick-and-morty-live-rick-and-morty-thumbnail.jpg')] overflow-hidden"
+    class="relative z-0 bg-primary background-container w-full h-screen md:min-h-screen md:h-fit bg-cover bg-right-bottom bg-[url('https://e1.pxfuel.com/desktop-wallpaper/976/559/desktop-wallpaper-rick-and-morty-live-rick-and-morty-thumbnail.jpg')] overflow-hidden"
   >
     <nav class="w-full z-20 relative text-white px-3 py-1">
       <router-link to="/">
@@ -45,15 +45,15 @@ const { result, loading, error } = useQuery(
     <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
     <div
       v-else
-      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8"
+      class="w-full flex md:flex-col gap-2 z-20 relative text-white px-24 lg:px-8 md:px-4"
     >
-      <div class="w-5/12 pt-10">
+      <div class="w-8/12 pt-10">
         <div>
           <div class="border border-gray-400 w-80">
             <img
               :src="result?.character.image"
               :alt="result?.character.image"
-              class="w-80"
+              class="w-80 md:w-full"
             />
             <p class="px-4 text-2xl">{{ result?.character.name }}</p>
             <p class="px-4">Status: {{ result?.character.status }}</p>
@@ -85,13 +85,13 @@ const { result, loading, error } = useQuery(
         </div>
       </div>
       <div
-        class="border-t w-7/12 border-l border-gray-400 rounded-lg py-3 px-2 h-144 overflow-hidden backdrop-blur-md bg-w-light"
+        class="border-t w-11/12 border-l border-gray-400 rounded-lg py-3 px-2 h-144 overflow-hidden backdrop-blur-md bg-w-light md:w-full"
       >
         <p class="text-lg mb-2">
           Episodes {{ result?.character.name.split(" ")[0] }} has participated
         </p>
         <div
-          class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll xl:grid-cols-1 lg:grid-cols-1 lg:justify-center"
+          class="grid grid-cols-2 gap-4 px-2 h-128 overflow-y-scroll xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 lg:justify-center"
         >
           <div
             v-for="episode in result?.character.episode"
@@ -139,7 +139,7 @@ const { result, loading, error } = useQuery(
       </div>
     </div>
     <footer
-      class="h-12 mt-3 bg-w-light w-full z-20 absolute bottom-0 flex justify-center gap-7"
+      class="h-12 mt-3 bg-w-light w-full z-20 absolute md:relative bottom-0 flex justify-center gap-7"
     >
       <p class="flex justify-center items-center gap-2 text-gray-300">
         <a

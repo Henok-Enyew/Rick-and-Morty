@@ -38,3 +38,23 @@ The design for the website is available on [Figma](https://www.figma.com/design/
 ```bash
 git clone https://github.com/your-username/rick-and-morty-website.git
 cd rick-and-morty-website
+```
+### Install Dependencies
+```bash
+npm install
+```
+
+### Run the Project Locally
+```bash
+npm run dev
+```
+
+### API
+
+This project uses the [Rick and Morty API](https://rickandmortyapi.com/) with **GraphQL** to fetch the following data:
+
+- **Characters**: `/graphql/character`
+- **Episodes**: `/graphql/episode`
+- **Locations**: `/graphql/location`
+
+You can check the full API documentation [here](https://rickandmortyapi.com/documentation).

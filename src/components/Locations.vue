@@ -1,5 +1,7 @@
 <!-- Locations page -->
 
+
+
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";

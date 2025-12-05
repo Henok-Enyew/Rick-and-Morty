@@ -220,7 +220,6 @@ function setSeason(season) {
     box-shadow 0.25s ease;
 }
 
-
 .episodes__season-num {
   font-family: var(--font-display);
   font-size: 0.95rem;

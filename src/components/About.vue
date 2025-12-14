@@ -238,6 +238,7 @@ function onSlideChange(swiper) {
   filter: drop-shadow(0 0 24px rgba(81, 217, 40, 0.18));
 }
 
+
 .about__orb {
   position: absolute;
   border-radius: 9999px;

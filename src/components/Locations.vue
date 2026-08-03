@@ -137,22 +137,22 @@ function setType(type) {
 
         <template v-else>
           <div :key="animTick" class="locations__grid is-paging">
-            <router-link
+        <router-link
               v-for="(location, index) in pageItems"
               :key="location.id"
-              :to="`/Location/${location.id}`"
+          :to="`/Location/${location.id}`"
               class="place-card"
               :style="{ '--i': index }"
             >
               <span class="place-card__icon" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
                   <path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z" />
-                </svg>
+          </svg>
               </span>
 
               <div class="place-card__body">
                 <h3 class="place-card__name" :title="location.name">
-                  {{ location.name }}
+            {{ location.name }}
                 </h3>
                 <p class="place-card__meta">
                   <span>{{ location.type || "Unknown" }}</span>
@@ -166,7 +166,7 @@ function setType(type) {
                   <path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z" />
                 </svg>
               </span>
-            </router-link>
+        </router-link>
           </div>
 
           <PageNav

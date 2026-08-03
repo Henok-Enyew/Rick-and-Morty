@@ -338,7 +338,7 @@ onUnmounted(() => observer?.disconnect());
 .about__image {
   display: block;
   width: 100%;
-  height: 17rem;
+  height: 22rem;
   object-fit: cover;
   transform: scale(1.04);
   transition: transform 0.7s ease;

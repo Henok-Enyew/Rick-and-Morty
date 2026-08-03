@@ -148,8 +148,8 @@ function statusClass(status) {
     />
 
     <FetchErrorOverlay
-      :show="!!error && !episode"
-      :message="error?.message || 'Failed to fetch'"
+      :show="!!error && !episode && !loading"
+      :message="error?.message || 'Failed to fetch this episode'"
       @retry="refetch"
     />
   </div>

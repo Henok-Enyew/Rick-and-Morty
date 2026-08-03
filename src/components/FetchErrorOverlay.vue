@@ -28,10 +28,18 @@ const emit = defineEmits(["retry", "home"]);
             The API hiccuped. Retry the hop, or bail back home.
           </p>
           <div class="fetch-error__actions">
-            <button type="button" class="fetch-error__btn fetch-error__btn--primary" @click="emit('retry')">
+            <button
+              type="button"
+              class="fetch-error__btn fetch-error__btn--primary"
+              @click="emit('retry')"
+            >
               Retry portal
             </button>
-            <router-link to="/" class="fetch-error__btn fetch-error__btn--ghost" @click="emit('home')">
+            <router-link
+              to="/"
+              class="fetch-error__btn fetch-error__btn--ghost"
+              @click="emit('home')"
+            >
               Back home
             </router-link>
           </div>
@@ -54,9 +62,9 @@ const emit = defineEmits(["retry", "home"]);
 .fetch-error__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 16, 8, 0.5);
-  backdrop-filter: blur(10px) saturate(1.05);
-  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  background: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .fetch-error__card {
@@ -65,8 +73,9 @@ const emit = defineEmits(["retry", "home"]);
   width: min(24rem, 100%);
   padding: 1.6rem 1.35rem 1.35rem;
   border-radius: 1rem;
-  background: rgba(18, 28, 14, 0.9);
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(18, 28, 14, 0.88);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.35);
   text-align: center;
   animation: card-pop 0.35s cubic-bezier(0.22, 1.2, 0.36, 1);
 }

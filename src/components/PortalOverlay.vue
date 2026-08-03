@@ -21,7 +21,7 @@ defineProps({
         aria-label="Loading"
       >
         <div class="portal-overlay__backdrop" aria-hidden="true" />
-        <div class="portal-overlay__card">
+        <div class="portal-overlay__content">
           <PortalLoader :accent="accent" :message="message" compact />
         </div>
       </div>
@@ -43,29 +43,19 @@ defineProps({
 .portal-overlay__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(10, 16, 8, 0.45);
-  backdrop-filter: blur(10px) saturate(1.05);
-  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+  background: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.portal-overlay__card {
+.portal-overlay__content {
   position: relative;
   z-index: 1;
-  width: min(20rem, 100%);
-  padding: 1.5rem 1.25rem 1.25rem;
-  border-radius: 1rem;
-  border: none;
-  background: rgba(18, 28, 14, 0.82);
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(81, 217, 40, 0.08);
-  animation: card-pop 0.35s cubic-bezier(0.22, 1.2, 0.36, 1);
-}
-
-.portal-overlay--gold .portal-overlay__card {
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(224, 187, 55, 0.1);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  animation: soft-in 0.3s cubic-bezier(0.22, 1.2, 0.36, 1);
 }
 
 .portal-fade-enter-active,
@@ -73,8 +63,8 @@ defineProps({
   transition: opacity 0.28s ease;
 }
 
-.portal-fade-enter-active .portal-overlay__card,
-.portal-fade-leave-active .portal-overlay__card {
+.portal-fade-enter-active .portal-overlay__content,
+.portal-fade-leave-active .portal-overlay__content {
   transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
@@ -83,16 +73,16 @@ defineProps({
   opacity: 0;
 }
 
-.portal-fade-enter-from .portal-overlay__card,
-.portal-fade-leave-to .portal-overlay__card {
+.portal-fade-enter-from .portal-overlay__content,
+.portal-fade-leave-to .portal-overlay__content {
   opacity: 0;
-  transform: scale(0.92) translateY(8px);
+  transform: scale(0.94) translateY(6px);
 }
 
-@keyframes card-pop {
+@keyframes soft-in {
   from {
     opacity: 0;
-    transform: scale(0.92) translateY(10px);
+    transform: scale(0.94) translateY(8px);
   }
   to {
     opacity: 1;

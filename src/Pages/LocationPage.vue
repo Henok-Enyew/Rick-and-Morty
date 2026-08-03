@@ -149,7 +149,7 @@ function statusClass(status) {
     />
 
     <PortalOverlay
-      :show="loading"
+      :show="loading && !error"
       accent="gold"
       message="Locking coordinates…"
     />
@@ -157,7 +157,7 @@ function statusClass(status) {
     <FetchErrorOverlay
       :show="!!error && !location && !loading"
       accent="gold"
-      :message="error?.message || 'Failed to fetch'"
+      :message="error?.message || 'Failed to fetch this location'"
       @retry="refetch"
     />
   </div>

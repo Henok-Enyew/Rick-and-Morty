@@ -174,13 +174,13 @@ function formatDate(value) {
     />
 
     <PortalOverlay
-      :show="loading"
+      :show="loading && !error"
       message="Materializing subject…"
     />
 
     <FetchErrorOverlay
       :show="!!error && !character && !loading"
-      :message="error?.message || 'Failed to fetch'"
+      :message="error?.message || 'Failed to fetch this character'"
       @retry="refetch"
     />
   </div>

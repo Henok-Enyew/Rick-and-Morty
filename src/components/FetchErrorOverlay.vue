@@ -49,7 +49,7 @@ const emit = defineEmits(["retry", "home"]);
 
 <style scoped>
 .fetch-error {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 30;
   display: grid;

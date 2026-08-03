@@ -29,7 +29,7 @@ defineProps({
 
 <style scoped>
 .portal-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 30;
   display: grid;

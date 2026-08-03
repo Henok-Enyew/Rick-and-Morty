@@ -40,6 +40,11 @@ export default {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['"Bricolage Grotesque"', "sans-serif"],
+        body: ['"Sora"', "sans-serif"],
+        sans: ['"Sora"', "sans-serif"],
+      },
       colors: {
         primary: "#121C0E",
         primary80: "#121c0ed8",

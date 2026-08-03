@@ -301,8 +301,9 @@ onUnmounted(() => {
 }
 
 .site-nav__wordmark {
+  font-family: var(--font-display);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
   color: #e5e7eb;
 }
@@ -317,8 +318,9 @@ onUnmounted(() => {
   position: relative;
   padding: 0.45rem 0.85rem;
   color: rgba(229, 231, 235, 0.78);
-  font-size: 0.92rem;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
   text-decoration: none;
   border-radius: 0.55rem;
   transition: color 0.2s ease, background-color 0.2s ease;
@@ -359,7 +361,8 @@ onUnmounted(() => {
   border-radius: 0.55rem;
   background: #51d928;
   color: #0b1408;
-  font-size: 0.85rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
   font-weight: 700;
   text-decoration: none;
   box-shadow: 0 0 0 0 rgba(81, 217, 40, 0.35);
@@ -494,8 +497,9 @@ onUnmounted(() => {
     gap: 1rem;
     padding: 0.95rem 0.25rem;
     color: rgba(243, 244, 246, 0.88);
+    font-family: var(--font-display);
     font-size: 1.75rem;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
     border-bottom: 1px solid rgba(45, 69, 35, 0.45);
     transform: translateY(18px);

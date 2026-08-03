@@ -1,16 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Sora:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-body: "Sora", sans-serif;
+  --color-ink: #e8ece4;
+  --color-portal: #51d928;
+  --color-portal-soft: #9cff66;
+}
+
 html {
   @apply scroll-smooth;
   scroll-padding-top: 5rem;
+  font-size: 17px;
   scrollbar-width: thin;
-  /* scrollbar-color: #121c0e transparent; */
   scrollbar-width: none;
 }
+
 body {
-  font-family: "Rubik", sans-serif;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.text-header {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+p,
+a,
+button,
+input,
+textarea,
+li,
+span,
+label {
+  font-family: inherit;
 }
 
 ::-webkit-scrollbar {
@@ -18,18 +55,15 @@ body {
   background-color: transparent;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: transparent !important;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #51d9283d;
   border-radius: 6px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #51d92880;
 }

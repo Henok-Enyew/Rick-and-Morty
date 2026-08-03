@@ -540,27 +540,49 @@ const { inView } = useInView(heroRef, {
 }
 
 @media (max-width: 1023px) {
+  .hero {
+    align-items: flex-start;
+  }
+
   .hero__content {
-    padding: 5.25rem 2.5rem 3.5rem;
+    padding: 5.5rem 2.5rem 3rem;
   }
 }
 
 @media (max-width: 767px) {
   .hero {
-    align-items: flex-end;
+    align-items: flex-start;
+    min-height: 100svh;
   }
 
   .hero__content {
     width: 100%;
-    padding: 5rem 1.1rem 5.5rem;
+    padding: 4.35rem 1.1rem 3.25rem;
   }
 
   .hero__logo {
-    width: min(16rem, 78vw);
+    width: min(15rem, 72vw);
+  }
+
+  .hero__tags {
+    margin-top: 0.75rem;
+  }
+
+  .hero__rating {
+    margin-top: 0.75rem;
+  }
+
+  .hero__blurb {
+    margin-top: 0.85rem;
   }
 
   .hero__meta {
     max-width: 18rem;
+    margin-top: 0.95rem;
+  }
+
+  .hero__actions {
+    margin-top: 1.15rem;
   }
 
   .hero__scroll {

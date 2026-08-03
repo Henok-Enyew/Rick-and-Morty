@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Sora:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-display: "Bricolage Grotesque", sans-serif;
-  --font-body: "Sora", sans-serif;
+  --font-display: "Syne", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
   --color-ink: #e8ece4;
   --color-portal: #51d928;
   --color-portal-soft: #9cff66;
@@ -15,15 +15,12 @@
 html {
   @apply scroll-smooth;
   scroll-padding-top: 5rem;
-  font-size: 17px;
   scrollbar-width: thin;
   scrollbar-width: none;
 }
 
 body {
   font-family: var(--font-body);
-  font-size: 1.05rem;
-  line-height: 1.65;
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -35,7 +32,7 @@ h3,
 h4,
 .text-header {
   font-family: var(--font-display);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   font-weight: 700;
 }
 

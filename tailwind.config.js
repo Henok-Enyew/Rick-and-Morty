@@ -41,9 +41,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Bricolage Grotesque"', "sans-serif"],
-        body: ['"Sora"', "sans-serif"],
-        sans: ['"Sora"', "sans-serif"],
+        display: ['"Syne"', "sans-serif"],
+        body: ['"Space Grotesk"', "sans-serif"],
+        sans: ['"Space Grotesk"', "sans-serif"],
       },
       colors: {
         primary: "#121C0E",

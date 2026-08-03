@@ -1,118 +1,484 @@
 <script setup>
-import { ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Episodes_Query } from "../queries/listEpisodesQuery";
 
 const { result, loading, error } = useQuery(Episodes_Query);
-const seasons = ["Season 1", "Season 2", "Season 3", "Season 4", "Season 5"];
 
+const seasons = [1, 2, 3, 4, 5];
 const activeSeason = ref(1);
-</script>
-<template>
-  <div
-    id="episodes"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] px-20 py-4 lg:px-8 md:px-2"
-  >
-    <p class="text-header text-3xl z-20 relative">Episodes (51)</p>
-    <div
-      class="z-20 relative flex items-center w-11/12 xl:w-full lg:w-10/12 md:w-11/12 gap-8 mx-auto mt-4 md:ml-1 md:gap-1"
-    >
-      <div
-        class="w-48 text-gray-200 flex flex-col lg:text-xs lg:px-4 md:text-xs items-center bg-seasonBackground px-8 md:px-1 cursor-pointer hover:bg-seasonBackgroundActive border border-transparent hover:border-white transition-all duration-300"
-        v-for="season in seasons"
-        :key="season"
-        :class="activeSeason == season[7] ? 'activeSeason' : ''"
-        @click="activeSeason = season[7]"
-      >
-        <svg
-          class="md:w-18 md:h-18"
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          fill="#fff"
-          viewBox="0 0 256 256"
-        >
-          <path
-            d="M232,216H183.36A103.95,103.95,0,1,0,128,232H232a8,8,0,0,0,0-16ZM40,128a88,88,0,1,1,88,88A88.1,88.1,0,0,1,40,128Zm88-24a24,24,0,1,0-24-24A24,24,0,0,0,128,104Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,128,72Zm24,104a24,24,0,1,0-24,24A24,24,0,0,0,152,176Zm-32,0a8,8,0,1,1,8,8A8,8,0,0,1,120,176Zm56-24a24,24,0,1,0-24-24A24,24,0,0,0,176,152Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,176,120ZM80,104a24,24,0,1,0,24,24A24,24,0,0,0,80,104Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,80,136Z"
-          ></path>
-        </svg>
+const sectionRef = ref(null);
+const inView = ref(false);
+let observer;
 
-        <p class="-mt-1 md:mt-0">{{ season }}</p>
-      </div>
-    </div>
-    <div
-      class="text-white relative z-20 w-5/6 lg:w-11/12 md:w-11/12 bg-episodesBackground h-120 md:h-144 mx-auto mt-8 rounded-md border border-seasonBackgroundActive grid grid-cols-2 px-16 py-8 justify-center items-center gap-y-2 md:gap-y-4 gap-x-16 md:grid-cols-1 md:px-4 md:py-2 md:items-stretch overflow-scroll"
-    >
-      <!-- <p v-if="loading">Loading</p> -->
-      <div
-        v-if="loading"
-        class="z-200 relative h-full w-full flex items-center justify-center"
-      >
-        <svg
-          class="animate-spin z-20 relative w-72 h-72"
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          fill="#fff"
-          viewBox="0 0 256 256"
-        >
-          <path
-            d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
-          ></path>
-        </svg>
-      </div>
-      <p v-if="error">{{ error.message }}</p>
-      <div
-        v-else
-        v-for="episode in result?.episodesByIds.filter(
-          (arr) => arr.episode[2] == activeSeason
-        )"
-        :key="episode"
-        class=""
-      >
-        <router-link
-          v-motion-pop-visible
-          class="bg-seasonBackground px-2 flex flex-col items-center w-72 lg:w-64 lg:text-sm rounded-full border border-transparent hover:border-white cursor-pointer hover:bg-seasonBackgroundActive transition-all duration-300"
-          :to="`/Episode/${episode.id}`"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            fill="#fff"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M216,104H102.09L210,75.51a8,8,0,0,0,5.68-9.84l-8.16-30a15.93,15.93,0,0,0-19.42-11.13L35.81,64.74a15.75,15.75,0,0,0-9.7,7.4,15.51,15.51,0,0,0-1.55,12L32,111.56c0,.14,0,.29,0,.44v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,216,104ZM192.16,40l6,22.07-22.62,6L147.42,51.83Zm-66.69,17.6,28.12,16.24-36.94,9.75L88.53,67.37Zm-79.4,44.62-6-22.08,26.5-7L94.69,89.4ZM208,200H48V120H208v80Z"
-            ></path>
-          </svg>
-          <p class="-mt-1">
-            {{ episode.episode }}
-          </p>
-          <p class="-mt-2 text-xs">
-            {{ episode.name }}
-          </p>
-        </router-link>
-      </div>
-    </div>
-  </div>
-</template>
-<style>
-.background-container::before {
-  @apply absolute top-0 left-0 w-full h-full z-10;
-  content: "";
-  backdrop-filter: blur(2px);
-  background-color: #121c0ec5;
-  /* color: #51d92875; */
+const seasonEpisodes = computed(() => {
+  const list = result.value?.episodesByIds ?? [];
+  return list.filter((ep) => String(ep.episode?.[2]) === String(activeSeason.value));
+});
+
+function episodeNumber(code) {
+  const match = code?.match(/E(\d+)/i);
+  return match ? match[1] : "--";
 }
 
-.activeSeason {
-  @apply bg-seasonBackgroundActive border-white;
+function setSeason(season) {
+  activeSeason.value = season;
+}
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        inView.value = true;
+        observer?.disconnect();
+      }
+    },
+    { threshold: 0.12 }
+  );
+  if (sectionRef.value) observer.observe(sectionRef.value);
+});
+
+onUnmounted(() => observer?.disconnect());
+</script>
+
+<template>
+  <section
+    id="episodes"
+    ref="sectionRef"
+    class="episodes"
+    :class="{ 'is-inview': inView }"
+  >
+    <div class="episodes__media" aria-hidden="true" />
+    <div class="episodes__veil" aria-hidden="true" />
+
+    <div class="episodes__inner">
+      <header class="episodes__header">
+        <div>
+          <p class="episodes__eyebrow">Broadcast Log</p>
+          <h2 class="episodes__title">Episodes</h2>
+        </div>
+        <p class="episodes__count">
+          <span>{{ seasonEpisodes.length || "—" }}</span>
+          in Season {{ activeSeason }}
+          <em>· 51 total</em>
+        </p>
+      </header>
+
+      <div class="episodes__seasons" role="tablist" aria-label="Seasons">
+        <button
+          v-for="season in seasons"
+          :key="season"
+          type="button"
+          role="tab"
+          class="episodes__season"
+          :class="{ 'is-active': activeSeason === season }"
+          :aria-selected="activeSeason === season"
+          @click="setSeason(season)"
+        >
+          <span class="episodes__season-num">S{{ season }}</span>
+          <span class="episodes__season-label">Season {{ season }}</span>
+        </button>
+      </div>
+
+      <div class="episodes__panel">
+        <div v-if="loading" class="episodes__state">
+          <span class="episodes__spinner" aria-hidden="true" />
+          <p>Opening the portal…</p>
+        </div>
+
+        <p v-else-if="error" class="episodes__state episodes__state--error">
+          {{ error.message }}
+        </p>
+
+        <div v-else class="episodes__grid">
+          <router-link
+            v-for="(episode, index) in seasonEpisodes"
+            :key="episode.id"
+            :to="`/Episode/${episode.id}`"
+            class="episode-card"
+            :style="{ '--i': index }"
+          >
+            <div class="episode-card__code">
+              <span class="episode-card__ep">E{{ episodeNumber(episode.episode) }}</span>
+              <span class="episode-card__season">{{ episode.episode }}</span>
+            </div>
+
+            <div class="episode-card__body">
+              <h3 class="episode-card__name">{{ episode.name }}</h3>
+              <p v-if="episode.air_date" class="episode-card__meta">
+                Aired {{ episode.air_date }}
+              </p>
+            </div>
+
+            <span class="episode-card__action" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256">
+                <path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z" />
+              </svg>
+            </span>
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+.episodes {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  padding: 2.5rem 5.5rem 2.75rem;
+  color: #e8ece4;
+}
+
+.episodes__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg")
+    center / cover no-repeat;
+  transform: scale(1.04);
+}
+
+.episodes__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 14, 0.82) 0%, rgba(18, 28, 14, 0.88) 55%, rgba(18, 28, 14, 0.94) 100%),
+    radial-gradient(ellipse at 15% 20%, rgba(81, 217, 40, 0.14), transparent 45%);
+  backdrop-filter: blur(2px);
+}
+
+.episodes__inner {
+  position: relative;
+  z-index: 1;
+  width: min(68rem, 100%);
+  margin: 0 auto;
+}
+
+.episodes__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.episodes.is-inview .episodes__header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.episodes__eyebrow {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(81, 217, 40, 0.95);
+}
+
+.episodes__title {
+  margin: 0;
+  color: #9cff66;
+  font-size: clamp(1.8rem, 2.8vw, 2.25rem);
+}
+
+.episodes__count {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(209, 213, 203, 0.75);
+}
+
+.episodes__count span {
+  color: #9cff66;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.episodes__count em {
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.episodes__seasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 1.15rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.55s ease 0.08s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s;
+}
+
+.episodes.is-inview .episodes__seasons {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.episodes__season {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.55rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(45, 69, 35, 0.9);
+  border-radius: 0.65rem;
+  background: rgba(18, 28, 14, 0.55);
+  color: rgba(229, 231, 235, 0.82);
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.episodes__season-num {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #9cff66;
+}
+
+.episodes__season-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.episodes__season:hover {
+  transform: translateY(-2px);
+  border-color: rgba(81, 217, 40, 0.55);
+  color: #fff;
+}
+
+.episodes__season.is-active {
+  background: rgba(81, 217, 40, 0.16);
+  border-color: rgba(156, 255, 102, 0.7);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(81, 217, 40, 0.15), 0 10px 28px rgba(81, 217, 40, 0.12);
+}
+
+.episodes__panel {
+  border: 1px solid rgba(57, 118, 37, 0.55);
+  border-radius: 0.9rem;
+  background: rgba(18, 28, 14, 0.55);
+  backdrop-filter: blur(12px);
+  padding: 0.85rem;
+  min-height: 22rem;
+  max-height: 28rem;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease 0.14s, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.14s;
+}
+
+.episodes.is-inview .episodes__panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.episodes__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  max-height: 26rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(81, 217, 40, 0.35) transparent;
+}
+
+.episodes__state {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  min-height: 20rem;
+  color: rgba(209, 213, 203, 0.8);
+  font-size: 0.95rem;
+}
+
+.episodes__state--error {
+  color: #fca5a5;
+}
+
+.episodes__spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(81, 217, 40, 0.2);
+  border-top-color: #51d928;
+  border-radius: 9999px;
+  animation: spin 0.8s linear infinite;
+}
+
+.episode-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.95rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(45, 69, 35, 0.55);
+  background:
+    linear-gradient(120deg, rgba(57, 118, 37, 0.28), rgba(18, 28, 14, 0.35));
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.episodes.is-inview .episode-card {
+  animation: card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.2s + var(--i) * 0.045s);
+}
+
+.episode-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, #9cff66, #51d928);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.episode-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(156, 255, 102, 0.55);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  background:
+    linear-gradient(120deg, rgba(81, 217, 40, 0.22), rgba(18, 28, 14, 0.5));
+}
+
+.episode-card:hover::before {
+  opacity: 1;
+}
+
+.episode-card__code {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 3.4rem;
+}
+
+.episode-card__ep {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #9cff66;
+}
+
+.episode-card__season {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(209, 213, 203, 0.6);
+}
+
+.episode-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #f3f6ef;
+}
+
+.episode-card__meta {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: rgba(209, 213, 203, 0.62);
+}
+
+.episode-card__action {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 9999px;
+  background: rgba(81, 217, 40, 0.15);
+  color: #9cff66;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.episode-card:hover .episode-card__action {
+  transform: scale(1.08);
+  background: #51d928;
+  color: #0b1408;
+}
+
+@keyframes card-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1023px) {
+  .episodes {
+    padding: 2.25rem 1.75rem 2.25rem;
+  }
+
+  .episodes__grid {
+    grid-template-columns: 1fr;
+    max-height: 24rem;
+  }
+
+  .episodes__panel {
+    max-height: 26rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .episodes {
+    padding: 1.85rem 0.85rem 2rem;
+  }
+
+  .episodes__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .episodes__season-label {
+    display: none;
+  }
+
+  .episodes__season {
+    min-width: 3.2rem;
+    justify-content: center;
+    padding-inline: 0.7rem;
+  }
+
+  .episode-card {
+    gap: 0.65rem;
+    padding: 0.75rem 0.8rem;
+  }
+
+  .episode-card__name {
+    font-size: 0.92rem;
+  }
 }
 </style>
-<!--
-  Season
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M232,216H183.36A103.95,103.95,0,1,0,128,232H232a8,8,0,0,0,0-16ZM40,128a88,88,0,1,1,88,88A88.1,88.1,0,0,1,40,128Zm88-24a24,24,0,1,0-24-24A24,24,0,0,0,128,104Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,128,72Zm24,104a24,24,0,1,0-24,24A24,24,0,0,0,152,176Zm-32,0a8,8,0,1,1,8,8A8,8,0,0,1,120,176Zm56-24a24,24,0,1,0-24-24A24,24,0,0,0,176,152Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,176,120ZM80,104a24,24,0,1,0,24,24A24,24,0,0,0,80,104Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,80,136Z"></path></svg>
-
-Episodes
-  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M216,104H102.09L210,75.51a8,8,0,0,0,5.68-9.84l-8.16-30a15.93,15.93,0,0,0-19.42-11.13L35.81,64.74a15.75,15.75,0,0,0-9.7,7.4,15.51,15.51,0,0,0-1.55,12L32,111.56c0,.14,0,.29,0,.44v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,216,104ZM192.16,40l6,22.07-22.62,6L147.42,51.83Zm-66.69,17.6,28.12,16.24-36.94,9.75L88.53,67.37Zm-79.4,44.62-6-22.08,26.5-7L94.69,89.4ZM208,200H48V120H208v80Z"></path></svg> -->

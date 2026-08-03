@@ -59,6 +59,7 @@ export const Episodes_Query = gql`
       name
       id
       episode
+      air_date
     }
   }
 `;

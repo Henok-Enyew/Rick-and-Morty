@@ -3,7 +3,11 @@ import { computed, onMounted, onUnmounted, ref, unref, watch } from "vue";
 /**
  * Client-side paging with optional auto-advance.
  * @param {import('vue').Ref|import('vue').ComputedRef} itemsRef
- * @param {{ pageSize?: number, autoMs?: number, enabled?: import('vue').Ref<boolean>|boolean }} options
+ * @param {{
+ *   pageSize?: number|import('vue').Ref<number>|import('vue').ComputedRef<number>,
+ *   autoMs?: number,
+ *   enabled?: import('vue').Ref<boolean>|boolean
+ * }} options
  */
 export function usePagedList(
   itemsRef,
@@ -19,21 +23,22 @@ export function usePagedList(
   let progressStartedAt = 0;
 
   const isEnabled = () => unref(enabled) !== false;
+  const size = () => Math.max(1, Number(unref(pageSize)) || 1);
 
   const totalPages = computed(() =>
-    Math.max(1, Math.ceil((itemsRef.value?.length || 0) / pageSize))
+    Math.max(1, Math.ceil((itemsRef.value?.length || 0) / size()))
   );
 
   const pageItems = computed(() => {
     const list = itemsRef.value || [];
-    const start = page.value * pageSize;
-    return list.slice(start, start + pageSize);
+    const start = page.value * size();
+    return list.slice(start, start + size());
   });
 
   const rangeLabel = computed(() => {
     const total = itemsRef.value?.length || 0;
     if (!total) return "0 of 0";
-    const start = page.value * pageSize + 1;
+    const start = page.value * size() + 1;
     const end = Math.min(total, start + pageItems.value.length - 1);
     return `${start}–${end} of ${total}`;
   });
@@ -118,6 +123,15 @@ export function usePagedList(
   watch(totalPages, (pages) => {
     if (page.value > pages - 1) page.value = 0;
   });
+
+  watch(
+    () => size(),
+    () => {
+      page.value = 0;
+      animTick.value += 1;
+      restartAuto();
+    }
+  );
 
   watch(
     () => unref(enabled),

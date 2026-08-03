@@ -4,6 +4,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { Locations_Query } from "../queries/listLocationsQuery";
 import { usePagedList } from "../composables/usePagedList";
 import { useInView } from "../composables/useInView";
+import { useMediaQuery } from "../composables/useMediaQuery";
 import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Locations_Query);
@@ -11,6 +12,8 @@ const { result, loading, error } = useQuery(Locations_Query);
 const activeType = ref("All");
 const sectionRef = ref(null);
 const revealed = ref(false);
+const isMobile = useMediaQuery("(max-width: 767px)");
+const pageSize = computed(() => (isMobile.value ? 5 : 10));
 
 const { inView: isActive } = useInView(sectionRef, {
   threshold: 0.08,
@@ -55,7 +58,7 @@ const {
   pause,
   resume,
 } = usePagedList(filteredLocations, {
-  pageSize: 10,
+  pageSize,
   autoMs: 3000,
   enabled: isActive,
 });

@@ -4,6 +4,7 @@ import { useQuery } from "@vue/apollo-composable";
 import { Characters_Query } from "../queries/listCharactersQuery";
 import { usePagedList } from "../composables/usePagedList";
 import { useInView } from "../composables/useInView";
+import { useMediaQuery } from "../composables/useMediaQuery";
 import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Characters_Query);
@@ -12,6 +13,8 @@ const filters = ["All", "Alive", "Dead", "unknown"];
 const activeFilter = ref("All");
 const sectionRef = ref(null);
 const revealed = ref(false);
+const isMobile = useMediaQuery("(max-width: 767px)");
+const pageSize = computed(() => (isMobile.value ? 6 : 14));
 
 const { inView: isActive } = useInView(sectionRef, {
   threshold: 0.08,
@@ -44,7 +47,7 @@ const {
   pause,
   resume,
 } = usePagedList(filteredCharacters, {
-  pageSize: 14,
+  pageSize,
   autoMs: 3000,
   enabled: isActive,
 });

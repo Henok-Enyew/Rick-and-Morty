@@ -1,151 +1,367 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
 import { Location_Query } from "../queries/locationQuery";
+import DetailNav from "../components/DetailNav.vue";
+import PortalLoader from "../components/PortalLoader.vue";
+import Footer from "../components/Footer.vue";
+
 const route = useRoute();
-const id = route.params.id;
+const { result, loading, error } = useQuery(Location_Query, () => ({
+  id: route.params.id,
+}));
 
-const { result, loading, error } = useQuery(
-  Location_Query,
-  {},
-  {
-    variables: { id: id },
-  }
+const location = computed(() => result.value?.location);
+const residents = computed(() =>
+  (location.value?.residents ?? []).filter((resident) => resident?.id)
 );
-</script>
-<template>
-  <div
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] overflow-hidden"
-  >
-    <nav class="w-full z-20 relative text-white px-3 py-1">
-      <router-link to="/">
-        <img
-          src="../assets/Images/Logo.png"
-          alt="Logo"
-          class="h-12 w-14 rounded-full"
-      /></router-link>
-    </nav>
-    <!-- <p v-if="loading">loading</p> -->
-    <div
-      v-if="loading"
-      class="z-200 relative h-full w-full flex items-center justify-center"
-    >
-      <svg
-        class="animate-spin z-20 relative w-72 h-72"
-        xmlns="http://www.w3.org/2000/svg"
-        width="64"
-        height="64"
-        fill="#fff"
-        viewBox="0 0 256 256"
-      >
-        <path
-          d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
-        ></path>
-      </svg>
-    </div>
-    <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
+const residentCount = computed(() => residents.value.length);
 
-    <div
-      v-else
-      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 md:px-4 md:flex-col py-1"
-    >
-      <div class="w-5/12 py-16 md:w-11/12 md:py-3">
-        <p class="text-4xl">{{ result?.location.name }}</p>
-        <p>Dimension: {{ result?.location.dimension }}</p>
-        <p>Type: {{ result?.location.type }}</p>
-        <p>
-          Created at:
-          {{
-            new Date(result?.location.created).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })
-          }}
-        </p>
-      </div>
-      <div
-        class="border-t border-l border-gray-400 rounded-lg py-3 px-2 h-144 md:h-120 overflow-hidden md:w-8/12"
-      >
-        <p class="text-2xl mb-2">Residents</p>
-        <div
-          class="grid grid-cols-3 md:grid-cols-1 gap-4 md:gap-1 px-2 h-128 overflow-y-scroll"
-        >
-          <router-link
-            v-for="resident in result?.location.residents"
-            :key="resident.id"
-            :to="`/Character/${resident.id}`"
-            class="w-48 xl:w-40 lg:w-36 max-h-72 md:mx-auto bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1"
-          >
-            <img
-              :src="resident.image"
-              :alt="resident.name"
-              class="w-48 rounded-lg"
-            />
-            <p class="pl-2">{{ resident.name }}</p>
-            <p class="pl-4 text-xs font-thin">
-              Species: {{ resident.species }}
-            </p>
-            <p class="pl-4 text-xs font-thin">Gender: {{ resident.gender }}</p>
-            <p class="pl-4 text-xs font-thin">Status: {{ resident.status }}</p>
-          </router-link>
-        </div>
-      </div>
-    </div>
-    <footer
-      class="h-12 bg-w-light w-full z-20 absolute bottom-0 flex justify-center gap-7"
-    >
-      <p class="flex justify-center items-center gap-2 text-gray-300">
-        <a
-          href="https://www.figma.com/design/OMn7u5chFuQXKFWLl2QBCJ/Location-Page?node-id=0%3A1&t=EKKAtHgoEALZ5v79-1"
-          target="_blank"
-          class="hover:scale-110 transition-all duration-300"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
-            fill="#f0f0f0"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M192,96a40,40,0,0,0-24-72H96A40,40,0,0,0,72,96a40,40,0,0,0,1.37,65A44,44,0,1,0,144,196V160a40,40,0,1,0,48-64Zm-64,56H96a24,24,0,0,1,0-48h32Zm40-64H144V40h24a24,24,0,0,1,0,48Z"
-            ></path>
-          </svg>
-        </a>
-        <a
-          href="https://github.com/Henok-Enyew/Rick-and-Morty"
-          target="_blank"
-          class="hover:scale-110 transition-all duration-300"
-        >
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20 0C8.95536 0 0 9.1875 0 20.5089C0 29.5714 5.73214 37.25 13.6786 39.9643C13.79 39.9885 13.9038 40.0005 14.0179 40C14.7589 40 15.0446 39.4553 15.0446 38.9821C15.0446 38.4911 15.0268 37.2053 15.0179 35.4911C14.3563 35.6461 13.6795 35.727 13 35.7321C9.15179 35.7321 8.27679 32.7411 8.27679 32.7411C7.36607 30.375 6.05357 29.7411 6.05357 29.7411C4.3125 28.5178 6.04464 28.4821 6.17857 28.4821H6.1875C8.19643 28.6607 9.25 30.6071 9.25 30.6071C10.25 32.3571 11.5893 32.8482 12.7857 32.8482C13.5768 32.8324 14.3557 32.6498 15.0714 32.3125C15.25 30.9911 15.7679 30.0893 16.3393 29.5714C11.9018 29.0536 7.23214 27.2946 7.23214 19.4375C7.23214 17.1964 8.00893 15.3661 9.28571 13.9375C9.08036 13.4196 8.39286 11.3304 9.48214 8.50893C9.62825 8.47396 9.77843 8.45895 9.92857 8.46428C10.6518 8.46428 12.2857 8.74107 14.9821 10.6161C18.2585 9.69938 21.7236 9.69938 25 10.6161C27.6964 8.74107 29.3304 8.46428 30.0536 8.46428C30.2037 8.45895 30.3539 8.47396 30.5 8.50893C31.5893 11.3304 30.9018 13.4196 30.6964 13.9375C31.9732 15.375 32.75 17.2054 32.75 19.4375C32.75 27.3125 28.0714 29.0446 23.6161 29.5536C24.3304 30.1875 24.9732 31.4375 24.9732 33.3482C24.9732 36.0893 24.9464 38.3036 24.9464 38.9732C24.9464 39.4553 25.2232 40 25.9643 40C26.0842 40.0005 26.2039 39.9885 26.3214 39.9643C34.2768 37.25 40 29.5625 40 20.5089C40 9.1875 31.0446 0 20 0Z"
-              fill="#f0f0f0"
-            />
-          </svg>
-        </a>
-      </p>
-    </footer>
-  </div>
-</template>
-<style>
-.background-container::before {
-  @apply absolute top-0 left-0 w-full h-full z-10;
-  content: "";
-  backdrop-filter: blur(2px);
-  background-color: #121c0ee1;
-  /* color: #e0bb3767; */
+function formatDate(value) {
+  if (!value) return "—";
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
-.bg-w-light {
-  background-color: #ffffff1c;
+function statusClass(status) {
+  if (status === "Alive") return "is-alive";
+  if (status === "Dead") return "is-dead";
+  return "is-unknown";
+}
+</script>
+
+<template>
+  <div class="detail detail--location">
+    <div class="detail__media" aria-hidden="true" />
+    <div class="detail__veil" aria-hidden="true" />
+
+    <DetailNav back-label="All locations" />
+
+    <main class="detail__main">
+      <PortalLoader
+        v-if="loading"
+        accent="gold"
+        message="Locking coordinates…"
+      />
+
+      <p v-else-if="error" class="detail__error">{{ error.message }}</p>
+
+      <template v-else-if="location">
+        <section class="place-hero">
+          <p class="detail__eyebrow">Coordinate File</p>
+          <h1>{{ location.name }}</h1>
+
+          <div class="place-hero__meta">
+            <span class="meta-chip">
+              <strong>Type</strong>
+              {{ location.type || "Unknown" }}
+            </span>
+            <span class="meta-chip">
+              <strong>Dimension</strong>
+              {{ location.dimension || "Unknown" }}
+            </span>
+            <span class="meta-chip">
+              <strong>Created</strong>
+              {{ formatDate(location.created) }}
+            </span>
+            <span class="meta-chip">
+              <strong>Residents</strong>
+              {{ residentCount }}
+            </span>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="detail-panel__head">
+            <h2>Residents</h2>
+            <p>Local fauna, flora, and existential threats.</p>
+          </div>
+
+          <div v-if="residentCount" class="cast-grid">
+            <router-link
+              v-for="resident in residents"
+              :key="resident.id"
+              :to="`/Character/${resident.id}`"
+              class="cast-card"
+            >
+              <div class="cast-card__media">
+                <img
+                  :src="resident.image"
+                  :alt="resident.name"
+                  loading="lazy"
+                />
+                <span
+                  class="cast-card__badge"
+                  :class="statusClass(resident.status)"
+                >
+                  {{ resident.status }}
+                </span>
+              </div>
+              <div class="cast-card__body">
+                <h3>{{ resident.name }}</h3>
+                <p>{{ resident.species }} · {{ resident.gender }}</p>
+              </div>
+            </router-link>
+          </div>
+
+          <p v-else class="detail__empty">
+            This place is empty… suspiciously empty.
+          </p>
+        </section>
+      </template>
+    </main>
+
+    <Footer
+      figma-url="https://www.figma.com/design/OMn7u5chFuQXKFWLl2QBCJ/Location-Page?node-id=0%3A1&t=EKKAtHgoEALZ5v79-1"
+    />
+  </div>
+</template>
+
+<style scoped>
+.detail {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  color: #e8ece4;
+  background: #121c0e;
+}
+
+.detail__media {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg")
+    center / cover no-repeat;
+}
+
+.detail__veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 14, 0.88) 0%, rgba(18, 28, 14, 0.94) 55%, #121c0e 100%),
+    radial-gradient(ellipse at 75% 12%, rgba(224, 187, 55, 0.16), transparent 42%);
+  backdrop-filter: blur(3px);
+}
+
+.detail__main {
+  width: min(72rem, 100%);
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 2.5rem;
+}
+
+.detail__error,
+.detail__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: rgba(232, 236, 228, 0.8);
+}
+
+.detail__error {
+  color: #fca5a5;
+}
+
+.detail__eyebrow {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(224, 187, 55, 0.95);
+}
+
+.place-hero {
+  margin-bottom: 1.5rem;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.place-hero h1 {
+  margin: 0 0 1rem;
+  max-width: 36rem;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.08;
+  color: #f0d35c;
+  text-shadow: 0 0 36px rgba(224, 187, 55, 0.2);
+}
+
+.place-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(224, 187, 55, 0.3);
+  background: rgba(18, 28, 14, 0.55);
+  font-size: 0.82rem;
+  color: rgba(229, 231, 235, 0.88);
+}
+
+.meta-chip strong {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f0d35c;
+}
+
+.detail-panel {
+  border: 1px solid rgba(224, 187, 55, 0.35);
+  border-radius: 1rem;
+  background: rgba(18, 28, 14, 0.58);
+  backdrop-filter: blur(12px);
+  padding: 1.1rem;
+  animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.detail-panel__head {
+  margin-bottom: 1rem;
+}
+
+.detail-panel__head h2 {
+  margin: 0;
+  color: #f0d35c;
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+}
+
+.detail-panel__head p {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  color: rgba(209, 213, 203, 0.7);
+}
+
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+  max-height: 34rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(224, 187, 55, 0.4) transparent;
+}
+
+.cast-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  border: 1px solid rgba(224, 187, 55, 0.22);
+  background: rgba(18, 28, 14, 0.7);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cast-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(240, 211, 92, 0.55);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cast-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #0d140a;
+}
+
+.cast-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.cast-card:hover .cast-card__media img {
+  transform: scale(1.08);
+}
+
+.cast-card__badge {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0b1408;
+}
+
+.cast-card__badge.is-alive { background: #22c55e; }
+.cast-card__badge.is-dead { background: #ef4444; }
+.cast-card__badge.is-unknown { background: #9ca3af; color: #111827; }
+
+.cast-card__body {
+  padding: 0.65rem 0.7rem 0.75rem;
+}
+
+.cast-card__body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cast-card__body p {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(209, 213, 203, 0.65);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1279px) {
+  .cast-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .detail__main {
+    padding: 1.5rem 1.1rem 2rem;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .detail__main {
+    padding: 1.25rem 0.85rem 1.75rem;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: none;
+  }
 }
 </style>

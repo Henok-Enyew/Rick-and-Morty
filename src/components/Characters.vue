@@ -2,6 +2,8 @@
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Characters_Query } from "../queries/listCharactersQuery";
+import { usePagedList } from "../composables/usePagedList";
+import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Characters_Query);
 
@@ -19,6 +21,20 @@ const filteredCharacters = computed(() => {
     (character) => character.status === activeFilter.value
   );
 });
+
+const {
+  page,
+  totalPages,
+  pageItems,
+  rangeLabel,
+  animTick,
+  progress,
+  next,
+  prev,
+  goTo,
+  pause,
+  resume,
+} = usePagedList(filteredCharacters, { pageSize: 10, autoMs: 3000 });
 
 function statusClass(status) {
   if (status === "Alive") return "is-alive";
@@ -62,8 +78,7 @@ onUnmounted(() => observer?.disconnect());
           <h2 class="characters__title">Characters</h2>
         </div>
         <p class="characters__count">
-          <span>{{ filteredCharacters.length }}</span>
-          shown
+          <span>{{ rangeLabel }}</span>
           <em>· 100 total</em>
         </p>
       </header>
@@ -89,7 +104,13 @@ onUnmounted(() => observer?.disconnect());
         </button>
       </div>
 
-      <div class="characters__panel">
+      <div
+        class="characters__panel"
+        @mouseenter="pause"
+        @mouseleave="resume"
+        @focusin="pause"
+        @focusout="resume"
+      >
         <div v-if="loading" class="characters__state">
           <span class="characters__spinner" aria-hidden="true" />
           <p>Scanning dimensions…</p>
@@ -106,37 +127,50 @@ onUnmounted(() => observer?.disconnect());
           No characters in this status.
         </p>
 
-        <div v-else class="characters__grid">
-          <router-link
-            v-for="(character, index) in filteredCharacters"
-            :key="character.id"
-            :to="`/Character/${character.id}`"
-            class="char-card"
-            :style="{ '--i': Math.min(index, 24) }"
-          >
-            <div class="char-card__media">
-              <img
-                :src="character.image"
-                :alt="character.name"
-                loading="lazy"
-                class="char-card__image"
-              />
-              <span
-                class="char-card__badge"
-                :class="statusClass(character.status)"
-              >
-                {{ character.status }}
-              </span>
-            </div>
+        <template v-else>
+          <div :key="animTick" class="characters__grid is-paging">
+            <router-link
+              v-for="(character, index) in pageItems"
+              :key="character.id"
+              :to="`/Character/${character.id}`"
+              class="char-card"
+              :style="{ '--i': index }"
+            >
+              <div class="char-card__media">
+                <img
+                  :src="character.image"
+                  :alt="character.name"
+                  loading="lazy"
+                  class="char-card__image"
+                />
+                <span
+                  class="char-card__badge"
+                  :class="statusClass(character.status)"
+                >
+                  {{ character.status }}
+                </span>
+              </div>
 
-            <div class="char-card__body">
-              <h3 class="char-card__name" :title="character.name">
-                {{ character.name }}
-              </h3>
-              <p class="char-card__species">{{ character.species }}</p>
-            </div>
-          </router-link>
-        </div>
+              <div class="char-card__body">
+                <h3 class="char-card__name" :title="character.name">
+                  {{ character.name }}
+                </h3>
+                <p class="char-card__species">{{ character.species }}</p>
+              </div>
+            </router-link>
+          </div>
+
+          <PageNav
+            :page="page"
+            :total-pages="totalPages"
+            :range-label="rangeLabel"
+            :progress="progress"
+            accent="green"
+            @prev="prev"
+            @next="next"
+            @go="goTo"
+          />
+        </template>
       </div>
     </div>
   </section>
@@ -215,7 +249,7 @@ onUnmounted(() => observer?.disconnect());
   color: #9cff66;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 0.98rem;
 }
 
 .characters__count em {
@@ -301,8 +335,7 @@ onUnmounted(() => observer?.disconnect());
     linear-gradient(160deg, rgba(129, 152, 128, 0.14), rgba(18, 28, 14, 0.55));
   backdrop-filter: blur(10px);
   padding: 0.95rem;
-  min-height: 22rem;
-  max-height: 30rem;
+  min-height: 18rem;
   overflow: hidden;
   opacity: 0;
   transform: translateY(18px);
@@ -318,11 +351,11 @@ onUnmounted(() => observer?.disconnect());
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.85rem;
-  max-height: 28rem;
-  overflow-y: auto;
   padding: 0.15rem 0.35rem 0.35rem 0.15rem;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(81, 217, 40, 0.35) transparent;
+}
+
+.characters__grid.is-paging {
+  animation: page-swap 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .characters__state {
@@ -448,6 +481,17 @@ onUnmounted(() => observer?.disconnect());
   }
 }
 
+@keyframes page-swap {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -467,11 +511,6 @@ onUnmounted(() => observer?.disconnect());
 
   .characters__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    max-height: 26rem;
-  }
-
-  .characters__panel {
-    max-height: 28rem;
   }
 }
 
@@ -488,12 +527,10 @@ onUnmounted(() => observer?.disconnect());
   .characters__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.65rem;
-    max-height: 28rem;
   }
 
   .characters__panel {
     padding: 0.7rem;
-    max-height: 30rem;
   }
 
   .char-card__body {

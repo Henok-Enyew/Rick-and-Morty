@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rick-and-morty-tv-show.netlify.app/sitemap.xml

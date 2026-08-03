@@ -1,175 +1,362 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
 import { Episode_Query } from "../queries/episodeQuery";
+import DetailNav from "../components/DetailNav.vue";
+import PortalLoader from "../components/PortalLoader.vue";
+import Footer from "../components/Footer.vue";
+
 const route = useRoute();
-const id = route.params.id;
+const { result, loading, error } = useQuery(Episode_Query, () => ({
+  id: route.params.id,
+}));
 
-const { result, loading, error } = useQuery(
-  Episode_Query,
-  {},
-  {
-    variables: { id: id },
-  }
-);
-</script>
-<template>
-  <div
-    class="relative z-0 background-container bg-primary w-full h-screen md:min-h-screen md:h-fit bg-cover bg-right-bottom bg-[url('https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg')] overflow-hidden"
-  >
-    <nav class="w-full z-20 relative text-white px-3 py-1">
-      <router-link to="/">
-        <img
-          src="../assets/Images/Logo.png"
-          alt="Logo"
-          class="h-12 w-14 rounded-full"
-      /></router-link>
-    </nav>
-    <div
-      v-if="loading"
-      class="z-200 relative h-full w-full flex items-center justify-center"
-    >
-      <svg
-        class="animate-spin z-20 relative w-72 h-72"
-        xmlns="http://www.w3.org/2000/svg"
-        width="64"
-        height="64"
-        fill="#fff"
-        viewBox="0 0 256 256"
-      >
-        <path
-          d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
-        ></path>
-      </svg>
-    </div>
-    <p v-if="error" class="relative z-20 text-white">{{ error.message }}</p>
+const episode = computed(() => result.value?.episode);
+const castCount = computed(() => episode.value?.characters?.length ?? 0);
 
-    <div
-      v-else
-      class="w-full flex gap-2 z-20 relative text-white px-24 lg:px-8 py-1 md:px-4 md:flex-col"
-    >
-      <div class="w-5/12 md:w-11/12 py-16 md:py-2">
-        <p class="text-6xl">{{ result?.episode.episode }}</p>
-        <p class="text-2xl font-thin mb-4">{{ result?.episode.name }}</p>
-        <p class="flex items-end gap-3 font-thin">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            fill="#fff"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M232,216H183.36A103.95,103.95,0,1,0,128,232H232a8,8,0,0,0,0-16ZM40,128a88,88,0,1,1,88,88A88.1,88.1,0,0,1,40,128Zm88-24a24,24,0,1,0-24-24A24,24,0,0,0,128,104Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,128,72Zm24,104a24,24,0,1,0-24,24A24,24,0,0,0,152,176Zm-32,0a8,8,0,1,1,8,8A8,8,0,0,1,120,176Zm56-24a24,24,0,1,0-24-24A24,24,0,0,0,176,152Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,176,120ZM80,104a24,24,0,1,0,24,24A24,24,0,0,0,80,104Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,80,136Z"
-            ></path>
-          </svg>
-
-          Streamed at: {{ result?.episode.air_date }}
-        </p>
-        <p class="flex items-end gap-3 font-thin">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            fill="#fff"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M216,104H102.09L210,75.51a8,8,0,0,0,5.68-9.84l-8.16-30a15.93,15.93,0,0,0-19.42-11.13L35.81,64.74a15.75,15.75,0,0,0-9.7,7.4,15.51,15.51,0,0,0-1.55,12L32,111.56c0,.14,0,.29,0,.44v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V112A8,8,0,0,0,216,104ZM192.16,40l6,22.07-22.62,6L147.42,51.83Zm-66.69,17.6,28.12,16.24-36.94,9.75L88.53,67.37Zm-79.4,44.62-6-22.08,26.5-7L94.69,89.4ZM208,200H48V120H208v80Z"
-            ></path>
-          </svg>
-          Created at:
-          {{
-            new Date(result?.episode.created).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })
-          }}
-        </p>
-      </div>
-      <div
-        class="border-t border-l border-gray-400 md:w-4/5 rounded-lg py-3 px-2 h-144 overflow-hidden"
-      >
-        <p class="text-xl mb-2 md:text-md">Characters in the Episode</p>
-        <div
-          class="grid grid-cols-3 md:grid-cols-1 gap-4 px-2 h-128 overflow-y-scroll"
-        >
-          <router-link
-            v-for="character in result?.episode.characters"
-            :key="character.id"
-            :to="`/Character/${character.id}`"
-            class="w-48 xl:w-40 lg:w-36 max-h-72 bg-w-light border-t border-l border-gray-500 backdrop-blur-md rounded-lg transition-all duration-300 transform hover:scale-95 pb-1 mx-auto"
-          >
-            <img
-              :src="character.image"
-              :alt="character.name"
-              class="w-48 rounded-lg"
-            />
-            <p class="pl-2">{{ character.name }}</p>
-            <p class="pl-4 text-xs font-thin">
-              Species: {{ character.species }}
-            </p>
-            <p class="pl-4 text-xs font-thin">Gender: {{ character.gender }}</p>
-            <p class="pl-4 text-xs font-thin">Status: {{ character.status }}</p>
-          </router-link>
-        </div>
-      </div>
-    </div>
-    <footer
-      class="h-12 bg-w-light w-full z-20 absolute md:relative bottom-0 flex justify-center gap-7"
-    >
-      <p class="flex justify-center items-center gap-2 text-gray-300">
-        <a
-          href="https://www.figma.com/design/i3GtKBaZb4uL4Cd1tc3jcH/Episode-Page?node-id=0%3A1&t=XVOXk91BUPT24iHv-1"
-          target="_blank"
-          class="hover:scale-110 transition-all duration-300"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
-            fill="#f0f0f0"
-            viewBox="0 0 256 256"
-          >
-            <path
-              d="M192,96a40,40,0,0,0-24-72H96A40,40,0,0,0,72,96a40,40,0,0,0,1.37,65A44,44,0,1,0,144,196V160a40,40,0,1,0,48-64Zm-64,56H96a24,24,0,0,1,0-48h32Zm40-64H144V40h24a24,24,0,0,1,0,48Z"
-            ></path>
-          </svg>
-        </a>
-        <a
-          href="https://github.com/Henok-Enyew/Rick-and-Morty"
-          target="_blank"
-          class="hover:scale-110 transition-all duration-300"
-        >
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 40 40"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20 0C8.95536 0 0 9.1875 0 20.5089C0 29.5714 5.73214 37.25 13.6786 39.9643C13.79 39.9885 13.9038 40.0005 14.0179 40C14.7589 40 15.0446 39.4553 15.0446 38.9821C15.0446 38.4911 15.0268 37.2053 15.0179 35.4911C14.3563 35.6461 13.6795 35.727 13 35.7321C9.15179 35.7321 8.27679 32.7411 8.27679 32.7411C7.36607 30.375 6.05357 29.7411 6.05357 29.7411C4.3125 28.5178 6.04464 28.4821 6.17857 28.4821H6.1875C8.19643 28.6607 9.25 30.6071 9.25 30.6071C10.25 32.3571 11.5893 32.8482 12.7857 32.8482C13.5768 32.8324 14.3557 32.6498 15.0714 32.3125C15.25 30.9911 15.7679 30.0893 16.3393 29.5714C11.9018 29.0536 7.23214 27.2946 7.23214 19.4375C7.23214 17.1964 8.00893 15.3661 9.28571 13.9375C9.08036 13.4196 8.39286 11.3304 9.48214 8.50893C9.62825 8.47396 9.77843 8.45895 9.92857 8.46428C10.6518 8.46428 12.2857 8.74107 14.9821 10.6161C18.2585 9.69938 21.7236 9.69938 25 10.6161C27.6964 8.74107 29.3304 8.46428 30.0536 8.46428C30.2037 8.45895 30.3539 8.47396 30.5 8.50893C31.5893 11.3304 30.9018 13.4196 30.6964 13.9375C31.9732 15.375 32.75 17.2054 32.75 19.4375C32.75 27.3125 28.0714 29.0446 23.6161 29.5536C24.3304 30.1875 24.9732 31.4375 24.9732 33.3482C24.9732 36.0893 24.9464 38.3036 24.9464 38.9732C24.9464 39.4553 25.2232 40 25.9643 40C26.0842 40.0005 26.2039 39.9885 26.3214 39.9643C34.2768 37.25 40 29.5625 40 20.5089C40 9.1875 31.0446 0 20 0Z"
-              fill="#f0f0f0"
-            />
-          </svg>
-        </a>
-      </p>
-    </footer>
-  </div>
-</template>
-<style>
-.background-container::before {
-  @apply absolute top-0 left-0 w-full h-full z-10;
-  content: "";
-  backdrop-filter: blur(2px);
-  background-color: #121c0ee1;
-  /* color: #e0bb3767; */
+function formatDate(value) {
+  if (!value) return "—";
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
-.bg-w-light {
-  background-color: #ffffff1c;
+function statusClass(status) {
+  if (status === "Alive") return "is-alive";
+  if (status === "Dead") return "is-dead";
+  return "is-unknown";
+}
+</script>
+
+<template>
+  <div class="detail detail--episode">
+    <div class="detail__media" aria-hidden="true" />
+    <div class="detail__veil" aria-hidden="true" />
+
+    <DetailNav back-label="All episodes" />
+
+    <main class="detail__main">
+      <PortalLoader v-if="loading" message="Cueing the episode…" />
+
+      <p v-else-if="error" class="detail__error">{{ error.message }}</p>
+
+      <template v-else-if="episode">
+        <section class="episode-hero">
+          <p class="detail__eyebrow">Broadcast File</p>
+          <p class="episode-hero__code">{{ episode.episode }}</p>
+          <h1 class="episode-hero__title">{{ episode.name }}</h1>
+
+          <div class="episode-hero__meta">
+            <span class="meta-chip">
+              <strong>Aired</strong>
+              {{ episode.air_date }}
+            </span>
+            <span class="meta-chip">
+              <strong>Logged</strong>
+              {{ formatDate(episode.created) }}
+            </span>
+            <span class="meta-chip">
+              <strong>Cast</strong>
+              {{ castCount }} weirdos
+            </span>
+          </div>
+        </section>
+
+        <section class="detail-panel">
+          <div class="detail-panel__head">
+            <h2>Characters in this episode</h2>
+            <p>Tap a face. Enter their chaos.</p>
+          </div>
+
+          <div v-if="castCount" class="cast-grid">
+            <router-link
+              v-for="character in episode.characters"
+              :key="character.id"
+              :to="`/Character/${character.id}`"
+              class="cast-card"
+            >
+              <div class="cast-card__media">
+                <img
+                  :src="character.image"
+                  :alt="character.name"
+                  loading="lazy"
+                />
+                <span class="cast-card__badge" :class="statusClass(character.status)">
+                  {{ character.status }}
+                </span>
+              </div>
+              <div class="cast-card__body">
+                <h3>{{ character.name }}</h3>
+                <p>{{ character.species }} · {{ character.gender }}</p>
+              </div>
+            </router-link>
+          </div>
+
+          <p v-else class="detail__empty">No characters found in this timeline.</p>
+        </section>
+      </template>
+    </main>
+
+    <Footer
+      figma-url="https://www.figma.com/design/i3GtKBaZb4uL4Cd1tc3jcH/Episode-Page?node-id=0%3A1&t=XVOXk91BUPT24iHv-1"
+    />
+  </div>
+</template>
+
+<style scoped>
+.detail {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  color: #e8ece4;
+  background: #121c0e;
+}
+
+.detail__media {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg")
+    center / cover no-repeat;
+}
+
+.detail__veil {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 14, 0.88) 0%, rgba(18, 28, 14, 0.94) 55%, #121c0e 100%),
+    radial-gradient(ellipse at 20% 10%, rgba(81, 217, 40, 0.16), transparent 45%);
+  backdrop-filter: blur(3px);
+}
+
+.detail__main {
+  width: min(72rem, 100%);
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 2.5rem;
+}
+
+.detail__error,
+.detail__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: rgba(232, 236, 228, 0.8);
+}
+
+.detail__error {
+  color: #fca5a5;
+}
+
+.detail__eyebrow {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(81, 217, 40, 0.95);
+}
+
+.episode-hero {
+  margin-bottom: 1.5rem;
+  animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.episode-hero__code {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #9cff66;
+  text-shadow: 0 0 40px rgba(81, 217, 40, 0.25);
+}
+
+.episode-hero__title {
+  margin: 0.55rem 0 1rem;
+  max-width: 28rem;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.episode-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(45, 69, 35, 0.85);
+  background: rgba(18, 28, 14, 0.55);
+  font-size: 0.82rem;
+  color: rgba(229, 231, 235, 0.88);
+}
+
+.meta-chip strong {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9cff66;
+}
+
+.detail-panel {
+  border: 1px solid rgba(57, 118, 37, 0.55);
+  border-radius: 1rem;
+  background: rgba(18, 28, 14, 0.58);
+  backdrop-filter: blur(12px);
+  padding: 1.1rem;
+  animation: rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.detail-panel__head {
+  margin-bottom: 1rem;
+}
+
+.detail-panel__head h2 {
+  margin: 0;
+  color: #9cff66;
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+}
+
+.detail-panel__head p {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  color: rgba(209, 213, 203, 0.7);
+}
+
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+  max-height: 34rem;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(81, 217, 40, 0.35) transparent;
+}
+
+.cast-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  border: 1px solid rgba(45, 69, 35, 0.55);
+  background: rgba(18, 28, 14, 0.7);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cast-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(156, 255, 102, 0.55);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+.cast-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #0d140a;
+}
+
+.cast-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.cast-card:hover .cast-card__media img {
+  transform: scale(1.08);
+}
+
+.cast-card__badge {
+  position: absolute;
+  top: 0.45rem;
+  left: 0.45rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0b1408;
+}
+
+.cast-card__badge.is-alive { background: #22c55e; }
+.cast-card__badge.is-dead { background: #ef4444; }
+.cast-card__badge.is-unknown { background: #9ca3af; color: #111827; }
+
+.cast-card__body {
+  padding: 0.65rem 0.7rem 0.75rem;
+}
+
+.cast-card__body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cast-card__body p {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(209, 213, 203, 0.65);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1279px) {
+  .cast-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1023px) {
+  .detail__main {
+    padding: 1.5rem 1.1rem 2rem;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .detail__main {
+    padding: 1.25rem 0.85rem 1.75rem;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: none;
+  }
 }
 </style>

@@ -43,6 +43,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return { el: to.hash, top: 80, behavior: "smooth" };
+    }
+    if (savedPosition) return savedPosition;
     return { top: 0 };
   },
 });

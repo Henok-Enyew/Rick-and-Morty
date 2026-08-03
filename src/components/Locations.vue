@@ -1,77 +1,532 @@
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Locations_Query } from "../queries/listLocationsQuery";
+import { usePagedList } from "../composables/usePagedList";
+import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Locations_Query);
+
+const activeType = ref("All");
+const sectionRef = ref(null);
+const inView = ref(false);
+let observer;
+
+const locations = computed(() => result.value?.locationsByIds ?? []);
+
+const typeFilters = computed(() => {
+  const counts = new Map();
+  for (const location of locations.value) {
+    const type = location.type || "Unknown";
+    counts.set(type, (counts.get(type) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6)
+    .map(([type]) => type);
+});
+
+const filteredLocations = computed(() => {
+  if (activeType.value === "All") return locations.value;
+  return locations.value.filter(
+    (location) => (location.type || "Unknown") === activeType.value
+  );
+});
+
+const {
+  page,
+  totalPages,
+  pageItems,
+  rangeLabel,
+  animTick,
+  progress,
+  next,
+  prev,
+  goTo,
+  pause,
+  resume,
+} = usePagedList(filteredLocations, { pageSize: 10, autoMs: 3000 });
+
+function setType(type) {
+  activeType.value = type;
+}
+
+onMounted(() => {
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        inView.value = true;
+        observer?.disconnect();
+      }
+    },
+    { threshold: 0.1 }
+  );
+  if (sectionRef.value) observer.observe(sectionRef.value);
+});
+
+onUnmounted(() => observer?.disconnect());
 </script>
+
 <template>
-  <div
+  <section
     id="locations"
-    class="relative z-0 background-container w-full h-screen bg-cover bg-right-bottom bg-[url('https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg')] px-32 lg:px-8 xl:px-8 py-8 md:px-1"
+    ref="sectionRef"
+    class="locations"
+    :class="{ 'is-inview': inView }"
   >
-    <p class="text-header text-3xl z-20 relative mt-6">Locations (126)</p>
-    <div
-      class="text-white relative z-20 w-11/12 md:w-full bg-locationsBackground h-128 md:h-148 mt-4 ml-12 md:ml-0 rounded-md border-t border-l border-locations grid grid-cols-2 md:grid-cols-1 px-16 lg:px-4 md:px-2 py-8 gap-y-2 overflow-auto"
-    >
-      <!-- <p v-if="loading">Loading</p> -->
-      <div
-        v-if="loading"
-        class="z-200 relative h-full w-full flex items-center justify-center"
-      >
-        <svg
-          class="animate-spin z-20 relative w-72 h-72"
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          fill="#fff"
-          viewBox="0 0 256 256"
+    <div class="locations__media" aria-hidden="true" />
+    <div class="locations__veil" aria-hidden="true" />
+
+    <div class="locations__inner">
+      <header class="locations__header">
+        <div>
+          <p class="locations__eyebrow">Coordinate Index</p>
+          <h2 class="locations__title">Locations</h2>
+        </div>
+        <p class="locations__count">
+          <span>{{ rangeLabel }}</span>
+          <em>· 126 total</em>
+        </p>
+      </header>
+
+      <div class="locations__filters" role="tablist" aria-label="Location type">
+        <button
+          type="button"
+          role="tab"
+          class="locations__filter"
+          :class="{ 'is-active': activeType === 'All' }"
+          :aria-selected="activeType === 'All'"
+          @click="setType('All')"
         >
-          <path
-            d="M134,32V64a6,6,0,0,1-12,0V32a6,6,0,0,1,12,0Zm39.25,56.75A6,6,0,0,0,177.5,87l22.62-22.63a6,6,0,0,0-8.48-8.48L169,78.5a6,6,0,0,0,4.24,10.25ZM224,122H192a6,6,0,0,0,0,12h32a6,6,0,0,0,0-12Zm-46.5,47A6,6,0,0,0,169,177.5l22.63,22.62a6,6,0,0,0,8.48-8.48ZM128,186a6,6,0,0,0-6,6v32a6,6,0,0,0,12,0V192A6,6,0,0,0,128,186ZM78.5,169,55.88,191.64a6,6,0,1,0,8.48,8.48L87,177.5A6,6,0,1,0,78.5,169ZM70,128a6,6,0,0,0-6-6H32a6,6,0,0,0,0,12H64A6,6,0,0,0,70,128ZM64.36,55.88a6,6,0,0,0-8.48,8.48L78.5,87A6,6,0,1,0,87,78.5Z"
-          ></path>
-        </svg>
+          All
+        </button>
+        <button
+          v-for="type in typeFilters"
+          :key="type"
+          type="button"
+          role="tab"
+          class="locations__filter"
+          :class="{ 'is-active': activeType === type }"
+          :aria-selected="activeType === type"
+          @click="setType(type)"
+        >
+          {{ type }}
+        </button>
       </div>
-      <p v-if="error">{{ error.message }}</p>
 
       <div
-        v-else
-        v-for="location in result?.locationsByIds"
-        :key="location.id"
-        class=""
+        class="locations__panel"
+        @mouseenter="pause"
+        @mouseleave="resume"
+        @focusin="pause"
+        @focusout="resume"
       >
-        <router-link
-          v-motion-pop-visible
-          class="bg-locationBtn px-2 flex items-center gap-3 h-10 w-96 md:w-64 xl:w-80 lg:w-80 border border-transparent hover:border-white cursor-pointer hover:bg-locationBtnActive transition-all duration-300"
-          :to="`/Location/${location.id}`"
-        >
-          <svg
-            width="29"
-            height="24"
-            viewBox="0 0 29 24"
-            fill="#fff"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M28.6779 3.84998C27.7883 2.3165 25.3602 2.00685 21.6445 2.92965C19.9425 1.58657 17.8965 0.750125 15.741 0.516139C13.5856 0.282153 11.4078 0.660094 9.45722 1.60666C7.50663 2.55323 5.86214 4.03013 4.71217 5.86815C3.5622 7.70617 2.95326 9.83097 2.95511 11.9991C2.95518 12.5335 2.99213 13.0672 3.0657 13.5965C0.379643 16.3464 -0.566499 18.6073 0.326806 20.1482C0.879747 21.1017 2.04706 21.5846 3.75012 21.5846C4.78512 21.5667 5.81512 21.4366 6.82201 21.1963C7.00018 21.157 7.18081 21.1128 7.36389 21.0735C9.17409 22.5003 11.37 23.3526 13.6687 23.5206C15.9675 23.6886 18.264 23.1646 20.2624 22.0161C22.2608 20.8676 23.8696 19.1472 24.8818 17.0764C25.8939 15.0056 26.263 12.6792 25.9414 10.3968C27.4958 8.79941 28.5354 7.28559 28.8733 6.02243C29.092 5.18319 29.0281 4.4533 28.6779 3.84998ZM14.4993 1.9233C16.8064 1.92647 19.0428 2.72018 20.8358 4.17217C22.6288 5.62416 23.87 7.64673 24.3527 9.90284C22.3867 11.7828 19.6662 13.7943 16.5746 15.5699C13.2079 17.5064 10.1728 18.7572 7.72269 19.4454C6.22134 18.0768 5.16876 16.2863 4.70305 14.3089C4.23734 12.3314 4.38026 10.2594 5.11305 8.36465C5.84585 6.46989 7.13428 4.84089 8.80932 3.69139C10.4844 2.54188 12.4677 1.92557 14.4993 1.9233ZM1.59734 19.4085C1.16482 18.6626 1.88118 17.1279 3.44047 15.3536C3.95085 17.0305 4.83621 18.5693 6.02946 19.8533C3.61496 20.3227 2.01389 20.1187 1.59734 19.4085ZM14.4993 22.0749C12.6151 22.0768 10.7687 21.5465 9.17262 20.5451C11.7137 19.7206 14.5251 18.4488 17.3094 16.849C20.1147 15.2369 22.6091 13.449 24.5652 11.6993C24.5652 11.7988 24.5726 11.8983 24.5726 11.9991C24.57 14.6701 23.508 17.2311 21.6195 19.12C19.731 21.009 17.1703 22.0716 14.4993 22.0749ZM27.4442 5.63537C27.2132 6.4955 26.5497 7.53871 25.5568 8.65934C25.0471 6.97844 24.1603 5.43608 22.9642 4.1498C24.9081 3.77503 26.8962 3.72097 27.4024 4.5897C27.5487 4.84159 27.5622 5.19424 27.4442 5.63537Z"
-              fill="white"
-            />
-          </svg>
+        <div v-if="loading" class="locations__state">
+          <span class="locations__spinner" aria-hidden="true" />
+          <p>Triangulating coordinates…</p>
+        </div>
 
-          <p class="-mt-1">
-            {{ location.name }}
-          </p>
-        </router-link>
+        <p v-else-if="error" class="locations__state locations__state--error">
+          {{ error.message }}
+        </p>
+
+        <p v-else-if="!filteredLocations.length" class="locations__state">
+          No locations in this category.
+        </p>
+
+        <template v-else>
+          <div :key="animTick" class="locations__grid is-paging">
+            <router-link
+              v-for="(location, index) in pageItems"
+              :key="location.id"
+              :to="`/Location/${location.id}`"
+              class="place-card"
+              :style="{ '--i': index }"
+            >
+              <span class="place-card__icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z" />
+                </svg>
+              </span>
+
+              <div class="place-card__body">
+                <h3 class="place-card__name" :title="location.name">
+                  {{ location.name }}
+                </h3>
+                <p class="place-card__meta">
+                  <span>{{ location.type || "Unknown" }}</span>
+                  <span class="place-card__sep">·</span>
+                  <span>{{ location.dimension || "Unknown dimension" }}</span>
+                </p>
+              </div>
+
+              <span class="place-card__action" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z" />
+                </svg>
+              </span>
+            </router-link>
+          </div>
+
+          <PageNav
+            :page="page"
+            :total-pages="totalPages"
+            :range-label="rangeLabel"
+            :progress="progress"
+            accent="gold"
+            @prev="prev"
+            @next="next"
+            @go="goTo"
+          />
+        </template>
       </div>
     </div>
-  </div>
+  </section>
 </template>
-<style>
-.background-container::before {
-  @apply absolute top-0 left-0 w-full h-full z-10;
-  content: "";
+
+<style scoped>
+.locations {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  padding: 2.5rem 5.5rem 2.75rem;
+  color: #e8ece4;
+}
+
+.locations__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    url("https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg")
+    center / cover no-repeat;
+  transform: scale(1.04);
+}
+
+.locations__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 14, 0.84) 0%, rgba(18, 28, 14, 0.9) 60%, rgba(18, 28, 14, 0.95) 100%),
+    radial-gradient(ellipse at 80% 15%, rgba(224, 187, 55, 0.14), transparent 42%);
   backdrop-filter: blur(2px);
-  background-color: #121c0ee1;
-  /* color: #e0bb3767; */
+}
+
+.locations__inner {
+  position: relative;
+  z-index: 1;
+  width: min(68rem, 100%);
+  margin: 0 auto;
+}
+
+.locations__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.15rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.locations.is-inview .locations__header {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.locations__eyebrow {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(224, 187, 55, 0.95);
+}
+
+.locations__title {
+  margin: 0;
+  color: #f0d35c;
+  font-size: clamp(1.8rem, 2.8vw, 2.25rem);
+}
+
+.locations__count {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(209, 213, 203, 0.75);
+}
+
+.locations__count span {
+  color: #f0d35c;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.locations__count em {
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.locations__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.55s ease 0.08s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s;
+}
+
+.locations.is-inview .locations__filters {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.locations__filter {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(224, 187, 55, 0.28);
+  border-radius: 0.6rem;
+  background: rgba(18, 28, 14, 0.55);
+  color: rgba(229, 231, 235, 0.82);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.locations__filter:hover {
+  transform: translateY(-2px);
+  border-color: rgba(224, 187, 55, 0.55);
+  color: #fff;
+}
+
+.locations__filter.is-active {
+  background: rgba(224, 187, 55, 0.16);
+  border-color: rgba(240, 211, 92, 0.75);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(224, 187, 55, 0.12), 0 10px 24px rgba(224, 187, 55, 0.1);
+}
+
+.locations__panel {
+  border: 1px solid rgba(224, 187, 55, 0.35);
+  border-radius: 0.95rem;
+  background: rgba(18, 28, 14, 0.55);
+  backdrop-filter: blur(12px);
+  padding: 0.9rem;
+  min-height: 18rem;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease 0.12s, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+
+.locations.is-inview .locations__panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.locations__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.locations__grid.is-paging {
+  animation: page-swap 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.locations__state {
+  display: grid;
+  place-items: center;
+  gap: 0.75rem;
+  min-height: 18rem;
+  color: rgba(209, 213, 203, 0.8);
+  font-size: 0.95rem;
+}
+
+.locations__state--error {
+  color: #fca5a5;
+}
+
+.locations__spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(224, 187, 55, 0.2);
+  border-top-color: #e0bb37;
+  border-radius: 9999px;
+  animation: spin 0.8s linear infinite;
+}
+
+.place-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem 0.95rem;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(224, 187, 55, 0.22);
+  background: linear-gradient(120deg, rgba(224, 187, 55, 0.14), rgba(18, 28, 14, 0.4));
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.locations.is-inview .place-card {
+  animation: card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.18s + var(--i) * 0.035s);
+}
+
+.place-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, #f0d35c, #e0bb37);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.place-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 211, 92, 0.55);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  background: linear-gradient(120deg, rgba(224, 187, 55, 0.22), rgba(18, 28, 14, 0.55));
+}
+
+.place-card:hover::before {
+  opacity: 1;
+}
+
+.place-card__icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.55rem;
+  background: rgba(224, 187, 55, 0.14);
+  color: #f0d35c;
+}
+
+.place-card__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #f3f6ef;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.place-card__meta {
+  margin: 0.28rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: rgba(209, 213, 203, 0.62);
+}
+
+.place-card__sep {
+  opacity: 0.5;
+}
+
+.place-card__action {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 9999px;
+  background: rgba(224, 187, 55, 0.14);
+  color: #f0d35c;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.place-card:hover .place-card__action {
+  transform: scale(1.08);
+  background: #e0bb37;
+  color: #1a1505;
+}
+
+@keyframes card-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-swap {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1023px) {
+  .locations {
+    padding: 2.25rem 1.75rem 2.25rem;
+  }
+
+  .locations__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .locations {
+    padding: 1.85rem 0.85rem 2rem;
+  }
+
+  .locations__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .locations__filter {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .place-card {
+    gap: 0.65rem;
+    padding: 0.75rem 0.8rem;
+  }
+
+  .place-card__name {
+    font-size: 0.9rem;
+  }
 }
 </style>

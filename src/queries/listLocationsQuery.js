@@ -133,6 +133,8 @@ export const Locations_Query = gql`
     ) {
       name
       id
+      type
+      dimension
     }
   }
 `;

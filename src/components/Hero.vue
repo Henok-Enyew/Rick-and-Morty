@@ -158,7 +158,7 @@
 .hero__content {
   position: relative;
   width: min(42rem, 100%);
-  padding: 7.5rem 4rem 4.5rem;
+  padding: 5.75rem 4rem 4.5rem;
   z-index: 1;
 }
 
@@ -488,7 +488,7 @@
 
 @media (max-width: 1023px) {
   .hero__content {
-    padding: 6.5rem 2.5rem 3.5rem;
+    padding: 5.25rem 2.5rem 3.5rem;
   }
 }
 
@@ -499,7 +499,7 @@
 
   .hero__content {
     width: 100%;
-    padding: 6rem 1.1rem 5.5rem;
+    padding: 5rem 1.1rem 5.5rem;
   }
 
   .hero__logo {

@@ -190,6 +190,7 @@ function statusClass(status) {
   width: min(72rem, 100%);
   margin: 0 auto;
   padding: 1.75rem 1.5rem 2.5rem;
+  min-height: 32rem;
 }
 
 .detail__error,

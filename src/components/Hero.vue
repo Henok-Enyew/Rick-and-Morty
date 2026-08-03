@@ -1,5 +1,22 @@
+<script setup>
+import { ref } from "vue";
+import { useInView } from "../composables/useInView";
+
+const heroRef = ref(null);
+const { inView } = useInView(heroRef, {
+  threshold: 0.05,
+  rootMargin: "0px",
+  initial: true,
+});
+</script>
+
 <template>
-  <section class="hero" aria-label="Rick and Morty hero">
+  <section
+    ref="heroRef"
+    class="hero"
+    :class="{ 'is-active': inView }"
+    aria-label="Rick and Morty hero"
+  >
     <div class="hero__media" aria-hidden="true" />
     <div class="hero__veil" aria-hidden="true" />
     <div class="hero__glow hero__glow--one" aria-hidden="true" />
@@ -104,6 +121,17 @@
     right bottom / cover no-repeat;
   transform: scale(1.06);
   animation: hero-ken 22s ease-in-out infinite alternate;
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+.hero.is-active .hero__media {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+.hero:not(.is-active) .hero__media {
+  will-change: auto;
 }
 
 .hero__veil {
@@ -131,6 +159,7 @@
   bottom: -8rem;
   background: rgba(81, 217, 40, 0.22);
   animation: glow-drift 9s ease-in-out infinite alternate;
+  animation-play-state: paused;
 }
 
 .hero__glow--two {
@@ -140,6 +169,12 @@
   top: 18%;
   background: rgba(156, 255, 102, 0.12);
   animation: glow-drift 11s ease-in-out infinite alternate-reverse;
+  animation-play-state: paused;
+}
+
+.hero.is-active .hero__glow--one,
+.hero.is-active .hero__glow--two {
+  animation-play-state: running;
 }
 
 .hero__grid {
@@ -167,6 +202,11 @@
   height: auto;
   filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.45));
   animation: logo-float 5.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.hero.is-active .hero__logo {
+  animation-play-state: running;
 }
 
 .hero__tags {
@@ -184,8 +224,7 @@
   text-transform: uppercase;
   color: rgba(209, 213, 203, 0.85);
   border: 1px solid rgba(45, 69, 35, 0.9);
-  background: rgba(18, 28, 14, 0.35);
-  backdrop-filter: blur(8px);
+  background: rgba(18, 28, 14, 0.72);
   padding: 0.35rem 0.7rem;
   border-radius: 0.4rem;
   transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
@@ -321,7 +360,12 @@
   );
   transform: translateX(-130%);
   animation: shine-sweep 3.4s ease-in-out infinite;
+  animation-play-state: paused;
   pointer-events: none;
+}
+
+.hero.is-active .btn-portal__shine {
+  animation-play-state: running;
 }
 
 .btn-portal__icon {
@@ -347,8 +391,7 @@
 
 .btn-ghost {
   color: #e8ece4;
-  background: rgba(18, 28, 14, 0.35);
-  backdrop-filter: blur(8px);
+  background: rgba(18, 28, 14, 0.72);
   border: 1px solid transparent;
 }
 
@@ -360,6 +403,7 @@
   background: linear-gradient(120deg, #51d928, rgba(156, 255, 102, 0.2), #51d928);
   background-size: 220% 220%;
   animation: border-shift 3s linear infinite;
+  animation-play-state: paused;
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -369,6 +413,10 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+.hero.is-active .btn-ghost__border {
+  animation-play-state: running;
 }
 
 .btn-ghost__label {
@@ -429,6 +477,11 @@
   height: 35%;
   background: #9cff66;
   animation: scroll-line 1.6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.hero.is-active .hero__scroll i::after {
+  animation-play-state: running;
 }
 
 .hero__scroll:hover {

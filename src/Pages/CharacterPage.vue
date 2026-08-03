@@ -6,12 +6,13 @@ import { Character_Query } from "../queries/characterQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalOverlay from "../components/PortalOverlay.vue";
 import DetailSkeleton from "../components/DetailSkeleton.vue";
+import FetchErrorOverlay from "../components/FetchErrorOverlay.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
-const { result, loading, error } = useQuery(Character_Query, () => ({
+const { result, loading, error, refetch } = useQuery(Character_Query, () => ({
   id: route.params.id,
 }));
 
@@ -78,9 +79,7 @@ function formatDate(value) {
     <DetailNav back-label="All characters" />
 
     <main class="detail__main">
-      <p v-if="error && !character" class="detail__error">{{ error.message }}</p>
-
-      <DetailSkeleton v-else-if="!character" variant="character" />
+      <DetailSkeleton v-if="!character" variant="character" />
 
       <template v-else>
         <section class="char-hero">
@@ -177,6 +176,12 @@ function formatDate(value) {
     <PortalOverlay
       :show="loading"
       message="Materializing subject…"
+    />
+
+    <FetchErrorOverlay
+      :show="!!error && !character && !loading"
+      :message="error?.message || 'Failed to fetch'"
+      @retry="refetch"
     />
   </div>
 </template>

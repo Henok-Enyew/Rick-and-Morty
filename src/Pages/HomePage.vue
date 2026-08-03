@@ -1,10 +1,7 @@
 <script setup>
+import { defineAsyncComponent } from "vue";
 import Navbar from "../components/Navbar.vue";
 import Hero from "../components/Hero.vue";
-import About from "../components/About.vue";
-import Episodes from "../components/Episodes.vue";
-import Characters from "../components/Characters.vue";
-import Locations from "../components/Locations.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo } from "../composables/useSeo";
 import {
@@ -15,6 +12,11 @@ import {
   SITE_TAGLINE,
   SITE_URL,
 } from "../seo/defaults";
+
+const About = defineAsyncComponent(() => import("../components/About.vue"));
+const Episodes = defineAsyncComponent(() => import("../components/Episodes.vue"));
+const Characters = defineAsyncComponent(() => import("../components/Characters.vue"));
+const Locations = defineAsyncComponent(() => import("../components/Locations.vue"));
 
 useSeo({
   title: DEFAULT_SEO.title,

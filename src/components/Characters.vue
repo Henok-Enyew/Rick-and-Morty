@@ -1,8 +1,9 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Characters_Query } from "../queries/listCharactersQuery";
 import { usePagedList } from "../composables/usePagedList";
+import { useInView } from "../composables/useInView";
 import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Characters_Query);
@@ -10,8 +11,16 @@ const { result, loading, error } = useQuery(Characters_Query);
 const filters = ["All", "Alive", "Dead", "unknown"];
 const activeFilter = ref("All");
 const sectionRef = ref(null);
-const inView = ref(false);
-let observer;
+const revealed = ref(false);
+
+const { inView: isActive } = useInView(sectionRef, {
+  threshold: 0.08,
+  rootMargin: "80px 0px",
+});
+
+watch(isActive, (visible) => {
+  if (visible) revealed.value = true;
+});
 
 const characters = computed(() => result.value?.charactersByIds ?? []);
 
@@ -34,7 +43,11 @@ const {
   goTo,
   pause,
   resume,
-} = usePagedList(filteredCharacters, { pageSize: 14, autoMs: 3000 });
+} = usePagedList(filteredCharacters, {
+  pageSize: 14,
+  autoMs: 3000,
+  enabled: isActive,
+});
 
 function statusClass(status) {
   if (status === "Alive") return "is-alive";
@@ -45,21 +58,6 @@ function statusClass(status) {
 function setFilter(filter) {
   activeFilter.value = filter;
 }
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        inView.value = true;
-        observer?.disconnect();
-      }
-    },
-    { threshold: 0.1 }
-  );
-  if (sectionRef.value) observer.observe(sectionRef.value);
-});
-
-onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>
@@ -67,7 +65,7 @@ onUnmounted(() => observer?.disconnect());
     id="characters"
     ref="sectionRef"
     class="characters"
-    :class="{ 'is-inview': inView }"
+    :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <div class="characters__glow" aria-hidden="true" />
 
@@ -185,6 +183,8 @@ onUnmounted(() => observer?.disconnect());
   background: #121c0e;
   padding: 2rem 5.5rem 2.25rem;
   color: #e8ece4;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .characters__glow {
@@ -332,8 +332,7 @@ onUnmounted(() => observer?.disconnect());
   border: 1px solid rgba(45, 69, 35, 0.7);
   border-radius: 0.95rem;
   background:
-    linear-gradient(160deg, rgba(129, 152, 128, 0.14), rgba(18, 28, 14, 0.55));
-  backdrop-filter: blur(10px);
+    linear-gradient(160deg, rgba(129, 152, 128, 0.18), rgba(18, 28, 14, 0.88));
   padding: 0.75rem;
   min-height: 14rem;
   overflow: hidden;

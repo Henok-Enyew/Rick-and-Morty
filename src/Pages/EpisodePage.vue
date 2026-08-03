@@ -6,12 +6,13 @@ import { Episode_Query } from "../queries/episodeQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalOverlay from "../components/PortalOverlay.vue";
 import DetailSkeleton from "../components/DetailSkeleton.vue";
+import FetchErrorOverlay from "../components/FetchErrorOverlay.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
-const { result, loading, error } = useQuery(Episode_Query, () => ({
+const { result, loading, error, refetch } = useQuery(Episode_Query, () => ({
   id: route.params.id,
 }));
 
@@ -78,9 +79,7 @@ function statusClass(status) {
     <DetailNav back-label="All episodes" />
 
     <main class="detail__main">
-      <p v-if="error && !episode" class="detail__error">{{ error.message }}</p>
-
-      <DetailSkeleton v-else-if="!episode" variant="episode" />
+      <DetailSkeleton v-if="!episode" variant="episode" />
 
       <template v-else>
         <section class="episode-hero">
@@ -144,8 +143,14 @@ function statusClass(status) {
     />
 
     <PortalOverlay
-      :show="loading"
+      :show="loading && !error"
       message="Cueing the episode…"
+    />
+
+    <FetchErrorOverlay
+      :show="!!error && !episode"
+      :message="error?.message || 'Failed to fetch'"
+      @retry="refetch"
     />
   </div>
 </template>

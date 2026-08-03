@@ -6,12 +6,13 @@ import { Location_Query } from "../queries/locationQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalOverlay from "../components/PortalOverlay.vue";
 import DetailSkeleton from "../components/DetailSkeleton.vue";
+import FetchErrorOverlay from "../components/FetchErrorOverlay.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
-const { result, loading, error } = useQuery(Location_Query, () => ({
+const { result, loading, error, refetch } = useQuery(Location_Query, () => ({
   id: route.params.id,
 }));
 
@@ -76,9 +77,7 @@ function statusClass(status) {
     <DetailNav back-label="All locations" />
 
     <main class="detail__main">
-      <p v-if="error && !location" class="detail__error">{{ error.message }}</p>
-
-      <DetailSkeleton v-else-if="!location" variant="location" />
+      <DetailSkeleton v-if="!location" variant="location" />
 
       <template v-else>
         <section class="place-hero">
@@ -153,6 +152,13 @@ function statusClass(status) {
       :show="loading"
       accent="gold"
       message="Locking coordinates…"
+    />
+
+    <FetchErrorOverlay
+      :show="!!error && !location && !loading"
+      accent="gold"
+      :message="error?.message || 'Failed to fetch'"
+      @retry="refetch"
     />
   </div>
 </template>

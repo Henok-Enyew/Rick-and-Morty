@@ -1,11 +1,14 @@
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, unref, watch } from "vue";
 
 /**
  * Client-side paging with optional auto-advance.
  * @param {import('vue').Ref|import('vue').ComputedRef} itemsRef
- * @param {{ pageSize?: number, autoMs?: number }} options
+ * @param {{ pageSize?: number, autoMs?: number, enabled?: import('vue').Ref<boolean>|boolean }} options
  */
-export function usePagedList(itemsRef, { pageSize = 10, autoMs = 3000 } = {}) {
+export function usePagedList(
+  itemsRef,
+  { pageSize = 10, autoMs = 3000, enabled = true } = {}
+) {
   const page = ref(0);
   const paused = ref(false);
   const animTick = ref(0);
@@ -14,6 +17,8 @@ export function usePagedList(itemsRef, { pageSize = 10, autoMs = 3000 } = {}) {
   let autoTimer = null;
   let progressTimer = null;
   let progressStartedAt = 0;
+
+  const isEnabled = () => unref(enabled) !== false;
 
   const totalPages = computed(() =>
     Math.max(1, Math.ceil((itemsRef.value?.length || 0) / pageSize))
@@ -64,7 +69,7 @@ export function usePagedList(itemsRef, { pageSize = 10, autoMs = 3000 } = {}) {
   }
 
   function tickProgress() {
-    if (paused.value || totalPages.value <= 1) {
+    if (paused.value || !isEnabled() || totalPages.value <= 1) {
       progress.value = 0;
       return;
     }
@@ -78,7 +83,7 @@ export function usePagedList(itemsRef, { pageSize = 10, autoMs = 3000 } = {}) {
   function restartAuto() {
     clearTimers();
     progress.value = 0;
-    if (paused.value || totalPages.value <= 1 || !autoMs) return;
+    if (paused.value || !isEnabled() || totalPages.value <= 1 || !autoMs) return;
 
     progressStartedAt = performance.now();
     progressTimer = requestAnimationFrame(tickProgress);
@@ -113,6 +118,17 @@ export function usePagedList(itemsRef, { pageSize = 10, autoMs = 3000 } = {}) {
   watch(totalPages, (pages) => {
     if (page.value > pages - 1) page.value = 0;
   });
+
+  watch(
+    () => unref(enabled),
+    (on) => {
+      if (on) restartAuto();
+      else {
+        clearTimers();
+        progress.value = 0;
+      }
+    }
+  );
 
   onMounted(() => restartAuto());
   onUnmounted(() => clearTimers());

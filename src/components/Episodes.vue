@@ -1,15 +1,24 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Episodes_Query } from "../queries/listEpisodesQuery";
+import { useInView } from "../composables/useInView";
 
 const { result, loading, error } = useQuery(Episodes_Query);
 
 const seasons = [1, 2, 3, 4, 5];
 const activeSeason = ref(1);
 const sectionRef = ref(null);
-const inView = ref(false);
-let observer;
+const revealed = ref(false);
+
+const { inView: isActive } = useInView(sectionRef, {
+  threshold: 0.08,
+  rootMargin: "80px 0px",
+});
+
+watch(isActive, (visible) => {
+  if (visible) revealed.value = true;
+});
 
 const seasonEpisodes = computed(() => {
   const list = result.value?.episodesByIds ?? [];
@@ -24,21 +33,6 @@ function episodeNumber(code) {
 function setSeason(season) {
   activeSeason.value = season;
 }
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        inView.value = true;
-        observer?.disconnect();
-      }
-    },
-    { threshold: 0.12 }
-  );
-  if (sectionRef.value) observer.observe(sectionRef.value);
-});
-
-onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>
@@ -46,7 +40,7 @@ onUnmounted(() => observer?.disconnect());
     id="episodes"
     ref="sectionRef"
     class="episodes"
-    :class="{ 'is-inview': inView }"
+    :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <div class="episodes__media" aria-hidden="true" />
     <div class="episodes__veil" aria-hidden="true" />
@@ -130,6 +124,8 @@ onUnmounted(() => observer?.disconnect());
   overflow: hidden;
   padding: 2.5rem 5.5rem 2.75rem;
   color: #e8ece4;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .episodes__media {
@@ -138,7 +134,7 @@ onUnmounted(() => observer?.disconnect());
   z-index: -2;
   background:
     url("https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg")
-    center / cover no-repeat fixed;
+    center / cover no-repeat;
 }
 
 .episodes__veil {
@@ -148,7 +144,6 @@ onUnmounted(() => observer?.disconnect());
   background:
     linear-gradient(180deg, rgba(18, 28, 14, 0.82) 0%, rgba(18, 28, 14, 0.88) 55%, rgba(18, 28, 14, 0.94) 100%),
     radial-gradient(ellipse at 15% 20%, rgba(81, 217, 40, 0.14), transparent 45%);
-  backdrop-filter: blur(2px);
 }
 
 .episodes__inner {
@@ -270,8 +265,7 @@ onUnmounted(() => observer?.disconnect());
 .episodes__panel {
   border: 1px solid rgba(57, 118, 37, 0.55);
   border-radius: 0.9rem;
-  background: rgba(18, 28, 14, 0.55);
-  backdrop-filter: blur(12px);
+  background: rgba(18, 28, 14, 0.82);
   padding: 0.85rem;
   min-height: 22rem;
   max-height: 28rem;
@@ -454,10 +448,6 @@ onUnmounted(() => observer?.disconnect());
 @media (max-width: 767px) {
   .episodes {
     padding: 1.85rem 0.85rem 2rem;
-  }
-
-  .episodes__media {
-    background-attachment: scroll;
   }
 
   .episodes__header {

@@ -1,16 +1,25 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import { Locations_Query } from "../queries/listLocationsQuery";
 import { usePagedList } from "../composables/usePagedList";
+import { useInView } from "../composables/useInView";
 import PageNav from "./PageNav.vue";
 
 const { result, loading, error } = useQuery(Locations_Query);
 
 const activeType = ref("All");
 const sectionRef = ref(null);
-const inView = ref(false);
-let observer;
+const revealed = ref(false);
+
+const { inView: isActive } = useInView(sectionRef, {
+  threshold: 0.08,
+  rootMargin: "80px 0px",
+});
+
+watch(isActive, (visible) => {
+  if (visible) revealed.value = true;
+});
 
 const locations = computed(() => result.value?.locationsByIds ?? []);
 
@@ -45,26 +54,15 @@ const {
   goTo,
   pause,
   resume,
-} = usePagedList(filteredLocations, { pageSize: 10, autoMs: 3000 });
+} = usePagedList(filteredLocations, {
+  pageSize: 10,
+  autoMs: 3000,
+  enabled: isActive,
+});
 
 function setType(type) {
   activeType.value = type;
 }
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        inView.value = true;
-        observer?.disconnect();
-      }
-    },
-    { threshold: 0.1 }
-  );
-  if (sectionRef.value) observer.observe(sectionRef.value);
-});
-
-onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>
@@ -72,7 +70,7 @@ onUnmounted(() => observer?.disconnect());
     id="locations"
     ref="sectionRef"
     class="locations"
-    :class="{ 'is-inview': inView }"
+    :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <div class="locations__media" aria-hidden="true" />
     <div class="locations__veil" aria-hidden="true" />
@@ -192,6 +190,8 @@ onUnmounted(() => observer?.disconnect());
   overflow: hidden;
   padding: 2.5rem 5.5rem 2.75rem;
   color: #e8ece4;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .locations__media {
@@ -200,7 +200,7 @@ onUnmounted(() => observer?.disconnect());
   z-index: -2;
   background:
     url("https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg")
-    center / cover no-repeat fixed;
+    center / cover no-repeat;
 }
 
 .locations__veil {
@@ -210,7 +210,6 @@ onUnmounted(() => observer?.disconnect());
   background:
     linear-gradient(180deg, rgba(18, 28, 14, 0.84) 0%, rgba(18, 28, 14, 0.9) 60%, rgba(18, 28, 14, 0.95) 100%),
     radial-gradient(ellipse at 80% 15%, rgba(224, 187, 55, 0.14), transparent 42%);
-  backdrop-filter: blur(2px);
 }
 
 .locations__inner {
@@ -322,8 +321,7 @@ onUnmounted(() => observer?.disconnect());
 .locations__panel {
   border: 1px solid rgba(224, 187, 55, 0.35);
   border-radius: 0.95rem;
-  background: rgba(18, 28, 14, 0.55);
-  backdrop-filter: blur(12px);
+  background: rgba(18, 28, 14, 0.82);
   padding: 0.9rem;
   min-height: 18rem;
   overflow: hidden;
@@ -507,10 +505,6 @@ onUnmounted(() => observer?.disconnect());
 @media (max-width: 767px) {
   .locations {
     padding: 1.85rem 0.85rem 2rem;
-  }
-
-  .locations__media {
-    background-attachment: scroll;
   }
 
   .locations__header {

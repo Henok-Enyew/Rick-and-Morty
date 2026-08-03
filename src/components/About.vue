@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { ref, watch } from "vue";
 import { SwiperSlide, Swiper } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/effect-creative";
@@ -10,12 +10,30 @@ import {
   Keyboard,
   Pagination,
 } from "swiper/modules";
+import { useInView } from "../composables/useInView";
 
 const modules = [EffectCreative, Autoplay, Pagination, Keyboard];
 const aboutRef = ref(null);
-const inView = ref(false);
+const swiperInstance = ref(null);
 const activeIndex = ref(0);
-let observer;
+const revealed = ref(false);
+
+const { inView: isActive } = useInView(aboutRef, {
+  threshold: 0.12,
+  rootMargin: "60px 0px",
+});
+
+watch(
+  isActive,
+  (visible) => {
+    if (visible) revealed.value = true;
+    const autoplay = swiperInstance.value?.autoplay;
+    if (!autoplay) return;
+    if (visible) autoplay.start();
+    else autoplay.stop();
+  },
+  { flush: "post" }
+);
 
 const photos = [
   {
@@ -67,24 +85,14 @@ const creativeEffect = {
   },
 };
 
+function onSwiper(swiper) {
+  swiperInstance.value = swiper;
+  if (!isActive.value) swiper.autoplay?.stop();
+}
+
 function onSlideChange(swiper) {
   activeIndex.value = swiper.realIndex;
 }
-
-onMounted(() => {
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        inView.value = true;
-        observer?.disconnect();
-      }
-    },
-    { threshold: 0.18 }
-  );
-  if (aboutRef.value) observer.observe(aboutRef.value);
-});
-
-onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>
@@ -92,7 +100,7 @@ onUnmounted(() => observer?.disconnect());
     id="about"
     ref="aboutRef"
     class="about"
-    :class="{ 'is-inview': inView }"
+    :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <img
       src="../assets/Images/Portal.png"
@@ -132,11 +140,18 @@ onUnmounted(() => observer?.disconnect());
           }"
           :pagination="{ clickable: true }"
           class="about__swiper"
+          @swiper="onSwiper"
           @slideChange="onSlideChange"
         >
           <swiper-slide v-for="photo in photos" :key="photo.src">
             <figure class="about__frame">
-              <img :src="photo.src" :alt="photo.label" class="about__image" />
+              <img
+                :src="photo.src"
+                :alt="photo.label"
+                class="about__image"
+                loading="lazy"
+                decoding="async"
+              />
               <figcaption class="about__caption">{{ photo.label }}</figcaption>
               <span class="about__scan" aria-hidden="true" />
             </figure>
@@ -185,6 +200,8 @@ onUnmounted(() => observer?.disconnect());
   overflow: hidden;
   background: #121c0e;
   padding: 2.25rem 6rem 2.5rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
 }
 
 .about__portal {
@@ -215,6 +232,7 @@ onUnmounted(() => observer?.disconnect());
   bottom: 8%;
   background: rgba(81, 217, 40, 0.16);
   animation: orb-float 8s ease-in-out infinite alternate;
+  animation-play-state: paused;
 }
 
 .about__orb--b {
@@ -224,6 +242,12 @@ onUnmounted(() => observer?.disconnect());
   top: 14%;
   background: rgba(156, 255, 102, 0.1);
   animation: orb-float 10s ease-in-out infinite alternate-reverse;
+  animation-play-state: paused;
+}
+
+.about.is-active .about__orb--a,
+.about.is-active .about__orb--b {
+  animation-play-state: running;
 }
 
 .about__heading {
@@ -266,8 +290,7 @@ onUnmounted(() => observer?.disconnect());
   width: min(64rem, 100%);
   margin: 0 auto;
   padding: 1.25rem 1.5rem;
-  background: rgba(23, 35, 18, 0.42);
-  backdrop-filter: blur(18px);
+  background: rgba(23, 35, 18, 0.72);
   border-top: 2px solid #9cff66;
   border-left: 1px solid rgba(156, 255, 102, 0.65);
   border-radius: 1rem;
@@ -281,6 +304,9 @@ onUnmounted(() => observer?.disconnect());
 .about.is-inview .about__card {
   opacity: 1;
   transform: translateY(0);
+}
+
+.about.is-active.is-inview .about__card {
   animation: card-glow 5s ease-in-out infinite 1s;
 }
 
@@ -355,8 +381,7 @@ onUnmounted(() => observer?.disconnect());
   z-index: 2;
   padding: 0.35rem 0.65rem;
   border-radius: 0.4rem;
-  background: rgba(12, 18, 10, 0.72);
-  backdrop-filter: blur(8px);
+  background: rgba(12, 18, 10, 0.88);
   color: #e8ece4;
   font-family: var(--font-display);
   font-size: 0.78rem;

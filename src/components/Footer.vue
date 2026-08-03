@@ -1,10 +1,19 @@
 <script setup>
+import { ref } from "vue";
+import { useInView } from "../composables/useInView";
+
 defineProps({
   figmaUrl: {
     type: String,
     default:
       "https://www.figma.com/design/ZSVmfKMGibjB1y3a2mzXWg/Home-Page-of-the-Rick-and-Morty-Website?node-id=0-1&t=cFiTbdoqk9C7olcl-1",
   },
+});
+
+const footerRef = ref(null);
+const { inView } = useInView(footerRef, {
+  threshold: 0.05,
+  rootMargin: "40px 0px",
 });
 
 const year = new Date().getFullYear();
@@ -18,7 +27,11 @@ const links = [
 </script>
 
 <template>
-  <footer class="site-footer">
+  <footer
+    ref="footerRef"
+    class="site-footer"
+    :class="{ 'is-active': inView }"
+  >
     <div class="site-footer__glow" aria-hidden="true" />
 
     <div class="site-footer__inner">
@@ -92,6 +105,8 @@ const links = [
   border-top: 1px solid rgba(81, 217, 40, 0.22);
   color: #e8ece4;
   padding: 2.25rem 5.5rem 1.35rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
 }
 
 .site-footer__glow {
@@ -231,6 +246,11 @@ const links = [
   color: #ef4444;
   margin: 0 0.15rem;
   animation: heartbeat 1.6s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.site-footer.is-active .site-footer__heart {
+  animation-play-state: running;
 }
 
 @keyframes heartbeat {

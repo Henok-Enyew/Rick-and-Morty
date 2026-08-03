@@ -4,6 +4,7 @@
 @tailwind utilities;
 html {
   @apply scroll-smooth;
+  scroll-padding-top: 5rem;
   scrollbar-width: thin;
   /* scrollbar-color: #121c0e transparent; */
   scrollbar-width: none;

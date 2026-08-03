@@ -1,4 +1,5 @@
 <script setup>
+import Navbar from "../components/Navbar.vue";
 import Hero from "../components/Hero.vue";
 import About from "../components/About.vue";
 import Episodes from "../components/Episodes.vue";
@@ -8,12 +9,13 @@ import Footer from "../components/Footer.vue";
 </script>
 <template>
   <div class="w-full bg-primary">
-    <Hero></Hero>
-    <About></About>
-    <Episodes></Episodes>
-    <Characters></Characters>
-    <Locations></Locations>
-    <Footer></Footer>
+    <Navbar />
+    <Hero />
+    <About />
+    <Episodes />
+    <Characters />
+    <Locations />
+    <Footer />
   </div>
 </template>
 <style></style>

@@ -27,14 +27,15 @@ defineProps({
 .detail-nav {
   position: sticky;
   top: 0;
-  z-index: 40;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.85rem 1.25rem;
-  background: rgba(18, 28, 14, 0.72);
+  background: rgba(18, 28, 14, 0.88);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(45, 69, 35, 0.55);
 }
 

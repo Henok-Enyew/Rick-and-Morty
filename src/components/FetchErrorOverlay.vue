@@ -9,51 +9,49 @@ const emit = defineEmits(["retry", "home"]);
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition name="portal-fade">
-      <div
-        v-if="show"
-        class="fetch-error"
-        :class="`fetch-error--${accent}`"
-        role="alertdialog"
-        aria-live="assertive"
-        aria-label="Failed to load content"
-      >
-        <div class="fetch-error__backdrop" aria-hidden="true" />
-        <div class="fetch-error__card">
-          <p class="fetch-error__eyebrow">Portal glitch detected</p>
-          <h2 class="fetch-error__title">Couldn’t pull this dimension</h2>
-          <p class="fetch-error__message">{{ message }}</p>
-          <p class="fetch-error__hint">
-            The API hiccuped. Retry the hop, or bail back home.
-          </p>
-          <div class="fetch-error__actions">
-            <button
-              type="button"
-              class="fetch-error__btn fetch-error__btn--primary"
-              @click="emit('retry')"
-            >
-              Retry portal
-            </button>
-            <router-link
-              to="/"
-              class="fetch-error__btn fetch-error__btn--ghost"
-              @click="emit('home')"
-            >
-              Back home
-            </router-link>
-          </div>
+  <Transition name="portal-fade">
+    <div
+      v-if="show"
+      class="fetch-error"
+      :class="`fetch-error--${accent}`"
+      role="alertdialog"
+      aria-live="assertive"
+      aria-label="Failed to load content"
+    >
+      <div class="fetch-error__backdrop" aria-hidden="true" />
+      <div class="fetch-error__card">
+        <p class="fetch-error__eyebrow">Portal glitch detected</p>
+        <h2 class="fetch-error__title">Couldn’t pull this dimension</h2>
+        <p class="fetch-error__message">{{ message }}</p>
+        <p class="fetch-error__hint">
+          The API hiccuped. Retry the hop, or bail back home.
+        </p>
+        <div class="fetch-error__actions">
+          <button
+            type="button"
+            class="fetch-error__btn fetch-error__btn--primary"
+            @click="emit('retry')"
+          >
+            Retry portal
+          </button>
+          <router-link
+            to="/"
+            class="fetch-error__btn fetch-error__btn--ghost"
+            @click="emit('home')"
+          >
+            Back home
+          </router-link>
         </div>
       </div>
-    </Transition>
-  </Teleport>
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
 .fetch-error {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 210;
+  z-index: 30;
   display: grid;
   place-items: center;
   padding: 1.25rem;

@@ -189,37 +189,69 @@ onUnmounted(() => {
       </button>
     </div>
 
-    <div
-      id="mobile-nav"
-      class="site-nav__drawer"
-      :class="{ 'is-open': open }"
-      :aria-hidden="!open"
-    >
-      <nav class="site-nav__drawer-links" aria-label="Mobile">
-        <a
-          v-for="(link, i) in links"
-          :key="link.href"
-          :href="link.href"
-          class="site-nav__drawer-link"
-          :style="{ transitionDelay: open ? `${80 + i * 60}ms` : '0ms' }"
-          :class="{ 'is-active': activeSection === link.href }"
-          @click.prevent="goTo(link.href)"
-        >
-          <span class="site-nav__drawer-index">0{{ i + 1 }}</span>
-          {{ link.label }}
-        </a>
-      </nav>
-
-      <a
-        href="https://ww1.goojara.to/e0Mvx4"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="site-nav__drawer-cta"
-        @click="closeMenu"
+    <Teleport to="body">
+      <div
+        id="mobile-nav"
+        class="site-nav__drawer"
+        :class="{ 'is-open': open }"
+        :aria-hidden="!open"
       >
-        Watch now
-      </a>
-    </div>
+        <div class="site-nav__drawer-top">
+          <a
+            href="#"
+            class="site-nav__brand"
+            aria-label="Rick and Morty home"
+            @click.prevent="goHome"
+          >
+            <img
+              src="../assets/Images/Logo.png"
+              alt="Rick and Morty"
+              class="site-nav__logo"
+            />
+            <span class="site-nav__wordmark">Rick &amp; Morty</span>
+          </a>
+          <button
+            class="site-nav__toggle"
+            type="button"
+            :aria-expanded="open"
+            aria-controls="mobile-nav"
+            :aria-label="open ? 'Close menu' : 'Open menu'"
+            @click="toggleMenu"
+          >
+            <span class="site-nav__burger" :class="{ 'is-open': open }">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+
+        <nav class="site-nav__drawer-links" aria-label="Mobile">
+          <a
+            v-for="(link, i) in links"
+            :key="link.href"
+            :href="link.href"
+            class="site-nav__drawer-link"
+            :style="{ transitionDelay: open ? `${80 + i * 60}ms` : '0ms' }"
+            :class="{ 'is-active': activeSection === link.href }"
+            @click.prevent="goTo(link.href)"
+          >
+            <span class="site-nav__drawer-index">0{{ i + 1 }}</span>
+            {{ link.label }}
+          </a>
+        </nav>
+
+        <a
+          href="https://ww1.goojara.to/e0Mvx4"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="site-nav__drawer-cta"
+          @click="closeMenu"
+        >
+          Watch now
+        </a>
+      </div>
+    </Teleport>
   </header>
 </template>
 
@@ -228,7 +260,6 @@ onUnmounted(() => {
   position: fixed;
   inset: 0 0 auto;
   z-index: 100;
-  transform: translate3d(0, 0, 0);
   transition:
     transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.3s ease,
@@ -436,6 +467,10 @@ onUnmounted(() => {
   display: none;
 }
 
+.site-nav__drawer-top {
+  display: none;
+}
+
 @keyframes nav-pop {
   0% {
     transform: translate3d(0, -110%, 0);
@@ -473,10 +508,11 @@ onUnmounted(() => {
     justify-content: space-between;
     position: fixed;
     inset: 0;
-    padding: 5.5rem 1.5rem 2rem;
+    z-index: 120;
+    padding: 0 1.5rem 2rem;
     background:
       radial-gradient(ellipse at top right, rgba(81, 217, 40, 0.12), transparent 45%),
-      rgba(18, 28, 14, 0.97);
+      rgba(18, 28, 14, 0.98);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -489,10 +525,20 @@ onUnmounted(() => {
     pointer-events: auto;
   }
 
+  .site-nav__drawer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    margin-bottom: 1.25rem;
+  }
+
   .site-nav__drawer-links {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
+    flex: 1;
   }
 
   .site-nav__drawer-link {

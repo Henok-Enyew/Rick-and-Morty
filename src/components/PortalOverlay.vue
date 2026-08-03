@@ -9,31 +9,29 @@ defineProps({
 </script>
 
 <template>
-  <Teleport to="body">
-    <Transition name="portal-fade">
-      <div
-        v-if="show"
-        class="portal-overlay"
-        :class="`portal-overlay--${accent}`"
-        role="alertdialog"
-        aria-busy="true"
-        aria-live="polite"
-        aria-label="Loading"
-      >
-        <div class="portal-overlay__backdrop" aria-hidden="true" />
-        <div class="portal-overlay__content">
-          <PortalLoader :accent="accent" :message="message" compact />
-        </div>
+  <Transition name="portal-fade">
+    <div
+      v-if="show"
+      class="portal-overlay"
+      :class="`portal-overlay--${accent}`"
+      role="alertdialog"
+      aria-busy="true"
+      aria-live="polite"
+      aria-label="Loading"
+    >
+      <div class="portal-overlay__backdrop" aria-hidden="true" />
+      <div class="portal-overlay__content">
+        <PortalLoader :accent="accent" :message="message" compact />
       </div>
-    </Transition>
-  </Teleport>
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
 .portal-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 200;
+  z-index: 30;
   display: grid;
   place-items: center;
   padding: 1.25rem;

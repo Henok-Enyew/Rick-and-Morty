@@ -107,6 +107,7 @@ export const Characters_Query = gql`
     ) {
       name
       status
+      species
       image
       id
     }

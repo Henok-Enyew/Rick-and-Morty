@@ -595,6 +595,9 @@ const { inView } = useInView(heroRef, {
     margin-top: auto;
     padding-top: 2rem;
     padding-bottom: 0.35rem;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
     gap: 0.75rem;
   }
 
@@ -607,8 +610,10 @@ const { inView } = useInView(heroRef, {
 
   .btn-portal,
   .btn-ghost {
-    flex: 1 1 auto;
-    min-width: 9.5rem;
+    width: 100%;
+    flex: none;
+    min-width: 0;
+    justify-content: center;
   }
 }
 </style>

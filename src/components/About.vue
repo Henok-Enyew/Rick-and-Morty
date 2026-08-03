@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { SwiperSlide, Swiper } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/effect-creative";
@@ -11,29 +11,58 @@ import {
   Pagination,
 } from "swiper/modules";
 import { useInView } from "../composables/useInView";
+import { useMediaQuery } from "../composables/useMediaQuery";
 
 const modules = [EffectCreative, Autoplay, Pagination, Keyboard];
 const aboutRef = ref(null);
 const swiperInstance = ref(null);
 const activeIndex = ref(0);
 const revealed = ref(false);
+const isMobile = useMediaQuery("(max-width: 767px)");
 
 const { inView: isActive } = useInView(aboutRef, {
   threshold: 0.12,
   rootMargin: "60px 0px",
 });
 
+const swiperEffect = computed(() => (isMobile.value ? "slide" : "creative"));
+
+const creativeEffect = {
+  prev: {
+    shadow: true,
+    translate: ["-18%", 8, -180],
+    rotate: [0, 0, -12],
+    opacity: 0.45,
+  },
+  next: {
+    shadow: true,
+    translate: ["108%", 0, -40],
+    rotate: [0, 0, 10],
+    opacity: 0.2,
+  },
+};
+
 watch(
   isActive,
   (visible) => {
     if (visible) revealed.value = true;
-    const autoplay = swiperInstance.value?.autoplay;
+    const swiper = swiperInstance.value;
+    if (!swiper) return;
+    requestAnimationFrame(() => {
+      swiper.update();
+      swiper.slideToLoop?.(swiper.realIndex, 0);
+    });
+    const autoplay = swiper.autoplay;
     if (!autoplay) return;
     if (visible) autoplay.start();
     else autoplay.stop();
   },
   { flush: "post" }
 );
+
+watch(isMobile, () => {
+  requestAnimationFrame(() => swiperInstance.value?.update());
+});
 
 const photos = [
   {
@@ -70,24 +99,10 @@ const photos = [
   },
 ];
 
-const creativeEffect = {
-  prev: {
-    shadow: true,
-    translate: ["-18%", 8, -180],
-    rotate: [0, 0, -12],
-    opacity: 0.45,
-  },
-  next: {
-    shadow: true,
-    translate: ["108%", 0, -40],
-    rotate: [0, 0, 10],
-    opacity: 0.2,
-  },
-};
-
 function onSwiper(swiper) {
   swiperInstance.value = swiper;
   if (!isActive.value) swiper.autoplay?.stop();
+  requestAnimationFrame(() => swiper.update());
 }
 
 function onSlideChange(swiper) {
@@ -127,8 +142,9 @@ function onSlideChange(swiper) {
         </div>
 
         <swiper
+          :key="swiperEffect"
           :modules="modules"
-          effect="creative"
+          :effect="swiperEffect"
           :creative-effect="creativeEffect"
           :grab-cursor="true"
           :loop="true"
@@ -149,8 +165,8 @@ function onSlideChange(swiper) {
                 :src="photo.src"
                 :alt="photo.label"
                 class="about__image"
-                loading="lazy"
                 decoding="async"
+                referrerpolicy="no-referrer"
               />
               <figcaption class="about__caption">{{ photo.label }}</figcaption>
               <span class="about__scan" aria-hidden="true" />
@@ -158,7 +174,7 @@ function onSlideChange(swiper) {
           </swiper-slide>
         </swiper>
 
-        <p class="about__hint">Drag to hop dimensions</p>
+        <p class="about__hint">{{ isMobile ? "Swipe to hop dimensions" : "Drag to hop dimensions" }}</p>
       </div>
 
       <div class="about__story">
@@ -200,7 +216,7 @@ function onSlideChange(swiper) {
   overflow: hidden;
   background: #121c0e;
   padding: 2.25rem 6rem 2.5rem;
-  content-visibility: auto;
+  content-visibility: visible;
   contain-intrinsic-size: auto 720px;
 }
 
@@ -572,6 +588,7 @@ function onSlideChange(swiper) {
 @media (max-width: 767px) {
   .about {
     padding: 1.75rem 0.85rem 1.75rem;
+    overflow: visible;
   }
 
   .about__portal {
@@ -582,6 +599,31 @@ function onSlideChange(swiper) {
 
   .about__card {
     padding: 0.95rem 0.75rem 1.1rem;
+    overflow: hidden;
+  }
+
+  .about__gallery {
+    width: 100%;
+    max-width: 18rem;
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .about.is-inview .about__gallery {
+    transform: none;
+  }
+
+  .about__swiper {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .about__swiper :deep(.swiper-slide) {
+    height: auto;
+  }
+
+  .about__frame {
+    width: 100%;
   }
 
   .about__lead {
@@ -593,7 +635,7 @@ function onSlideChange(swiper) {
   }
 
   .about__image {
-    height: 14.5rem;
+    height: 16.5rem;
   }
 }
 </style>

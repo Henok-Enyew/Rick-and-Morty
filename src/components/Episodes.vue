@@ -138,8 +138,7 @@ onUnmounted(() => observer?.disconnect());
   z-index: -2;
   background:
     url("https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg")
-    center / cover no-repeat;
-  transform: scale(1.04);
+    center / cover no-repeat fixed;
 }
 
 .episodes__veil {
@@ -455,6 +454,10 @@ onUnmounted(() => observer?.disconnect());
 @media (max-width: 767px) {
   .episodes {
     padding: 1.85rem 0.85rem 2rem;
+  }
+
+  .episodes__media {
+    background-attachment: scroll;
   }
 
   .episodes__header {

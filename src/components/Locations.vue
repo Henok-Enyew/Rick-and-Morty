@@ -200,8 +200,7 @@ onUnmounted(() => observer?.disconnect());
   z-index: -2;
   background:
     url("https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg")
-    center / cover no-repeat;
-  transform: scale(1.04);
+    center / cover no-repeat fixed;
 }
 
 .locations__veil {
@@ -508,6 +507,10 @@ onUnmounted(() => observer?.disconnect());
 @media (max-width: 767px) {
   .locations {
     padding: 1.85rem 0.85rem 2rem;
+  }
+
+  .locations__media {
+    background-attachment: scroll;
   }
 
   .locations__header {

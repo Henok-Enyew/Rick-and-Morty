@@ -6,6 +6,8 @@ import { Episode_Query } from "../queries/episodeQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalLoader from "../components/PortalLoader.vue";
 import Footer from "../components/Footer.vue";
+import { useSeo, buildTitle } from "../composables/useSeo";
+import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
 const { result, loading, error } = useQuery(Episode_Query, () => ({
@@ -14,6 +16,42 @@ const { result, loading, error } = useQuery(Episode_Query, () => ({
 
 const episode = computed(() => result.value?.episode);
 const castCount = computed(() => episode.value?.characters?.length ?? 0);
+
+const seo = computed(() => {
+  const ep = episode.value;
+  if (!ep) {
+    return {
+      title: buildTitle("Episode"),
+      description:
+        "Explore Rick and Morty episode details, air dates, and the full cast from this timeline.",
+      path: `/Episode/${route.params.id}`,
+      image: DEFAULT_IMAGE,
+      type: "article",
+    };
+  }
+
+  return {
+    title: buildTitle(`${ep.episode} — ${ep.name}`),
+    description: `Rick and Morty ${ep.episode}: ${ep.name}. Aired ${ep.air_date}. Meet ${castCount.value} characters from this episode.`,
+    path: `/Episode/${ep.id || route.params.id}`,
+    image: DEFAULT_IMAGE,
+    type: "article",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "TVEpisode",
+      name: ep.name,
+      episodeNumber: ep.episode,
+      datePublished: ep.air_date,
+      url: `${SITE_URL}/Episode/${ep.id || route.params.id}`,
+      partOfSeries: {
+        "@type": "TVSeries",
+        name: "Rick and Morty",
+      },
+    },
+  };
+});
+
+useSeo(seo);
 
 function formatDate(value) {
   if (!value) return "—";

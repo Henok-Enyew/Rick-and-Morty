@@ -6,6 +6,8 @@ import { Location_Query } from "../queries/locationQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalLoader from "../components/PortalLoader.vue";
 import Footer from "../components/Footer.vue";
+import { useSeo, buildTitle } from "../composables/useSeo";
+import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
 const { result, loading, error } = useQuery(Location_Query, () => ({
@@ -17,6 +19,37 @@ const residents = computed(() =>
   (location.value?.residents ?? []).filter((resident) => resident?.id)
 );
 const residentCount = computed(() => residents.value.length);
+
+const seo = computed(() => {
+  const loc = location.value;
+  if (!loc) {
+    return {
+      title: buildTitle("Location"),
+      description:
+        "Explore a Rick and Morty location, its dimension, type, and resident roster.",
+      path: `/Location/${route.params.id}`,
+      image: DEFAULT_IMAGE,
+      type: "article",
+    };
+  }
+
+  return {
+    title: buildTitle(loc.name),
+    description: `${loc.name} — ${loc.type || "Unknown type"} in ${loc.dimension || "an unknown dimension"}. ${residentCount.value} residents catalogued.`,
+    path: `/Location/${loc.id || route.params.id}`,
+    image: DEFAULT_IMAGE,
+    type: "article",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Place",
+      name: loc.name,
+      description: `${loc.type || "Location"} in ${loc.dimension || "Unknown dimension"}`,
+      url: `${SITE_URL}/Location/${loc.id || route.params.id}`,
+    },
+  };
+});
+
+useSeo(seo);
 
 function formatDate(value) {
   if (!value) return "—";

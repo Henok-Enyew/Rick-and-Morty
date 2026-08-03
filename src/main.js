@@ -21,21 +21,38 @@ const routes = [
     path: "/",
     component: HomePage,
     name: "HomePage",
+    meta: {
+      title: "Home",
+      description:
+        "Explore Rick and Morty characters, episodes, and locations across the multiverse.",
+    },
   },
   {
     path: "/Location/:id",
     component: LocationPage,
     name: "LocationPage",
+    meta: {
+      title: "Location",
+      description: "Rick and Morty location details, dimension, and residents.",
+    },
   },
   {
     path: "/Episode/:id",
     component: EpisodePage,
     name: "EpisodePage",
+    meta: {
+      title: "Episode",
+      description: "Rick and Morty episode details and cast list.",
+    },
   },
   {
     path: "/Character/:id",
     component: CharacterPage,
     name: "CharacterPage",
+    meta: {
+      title: "Character",
+      description: "Rick and Morty character profile and episode appearances.",
+    },
   },
 ];
 

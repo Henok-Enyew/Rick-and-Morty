@@ -6,6 +6,8 @@ import { Character_Query } from "../queries/characterQuery";
 import DetailNav from "../components/DetailNav.vue";
 import PortalLoader from "../components/PortalLoader.vue";
 import Footer from "../components/Footer.vue";
+import { useSeo, buildTitle } from "../composables/useSeo";
+import { SITE_URL } from "../seo/defaults";
 
 const route = useRoute();
 const { result, loading, error } = useQuery(Character_Query, () => ({
@@ -14,6 +16,37 @@ const { result, loading, error } = useQuery(Character_Query, () => ({
 
 const character = computed(() => result.value?.character);
 const episodeCount = computed(() => character.value?.episode?.length ?? 0);
+
+const seo = computed(() => {
+  const c = character.value;
+  if (!c) {
+    return {
+      title: buildTitle("Character"),
+      description:
+        "Explore a Rick and Morty character profile, status, species, location, and episode appearances.",
+      path: `/Character/${route.params.id}`,
+      type: "profile",
+    };
+  }
+
+  return {
+    title: buildTitle(c.name),
+    description: `${c.name} — ${c.status} ${c.species}. Last known location: ${c.location?.name || "Unknown"}. Appears in ${episodeCount.value} episodes.`,
+    path: `/Character/${c.id || route.params.id}`,
+    image: c.image,
+    type: "profile",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: c.name,
+      image: c.image,
+      url: `${SITE_URL}/Character/${c.id || route.params.id}`,
+      description: `${c.status} ${c.species} from Rick and Morty`,
+    },
+  };
+});
+
+useSeo(seo);
 
 function statusClass(status) {
   if (status === "Alive") return "is-alive";

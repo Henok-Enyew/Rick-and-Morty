@@ -540,56 +540,69 @@ const { inView } = useInView(heroRef, {
 }
 
 @media (max-width: 1023px) {
-  .hero {
-    align-items: flex-start;
-  }
-
   .hero__content {
-    padding: 5.5rem 2.5rem 3rem;
+    padding: 5.5rem 2.5rem 3.5rem;
   }
 }
 
 @media (max-width: 767px) {
   .hero {
-    align-items: flex-start;
+    align-items: stretch;
     min-height: 100svh;
   }
 
   .hero__content {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    padding: 4.35rem 1.1rem 3.25rem;
+    min-height: 100svh;
+    padding: 5.15rem 1.15rem 4.35rem;
   }
 
   .hero__logo {
-    width: min(15rem, 72vw);
+    width: min(15.5rem, 74vw);
+    margin-top: 0.35rem;
   }
 
   .hero__tags {
-    margin-top: 0.75rem;
+    margin-top: 1.35rem;
+    gap: 0.5rem;
   }
 
   .hero__rating {
-    margin-top: 0.75rem;
+    margin-top: 1.4rem;
+  }
+
+  .hero__rating-score {
+    font-size: clamp(1.85rem, 9vw, 2.35rem);
   }
 
   .hero__blurb {
-    margin-top: 0.85rem;
+    margin-top: 1.4rem;
+    max-width: 22rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
   }
 
   .hero__meta {
-    max-width: 18rem;
-    margin-top: 0.95rem;
+    max-width: 20rem;
+    margin-top: 1.45rem;
+    gap: 0.55rem;
+    font-size: 0.88rem;
   }
 
   .hero__actions {
-    margin-top: 1.15rem;
+    margin-top: auto;
+    padding-top: 2rem;
+    padding-bottom: 0.35rem;
+    gap: 0.75rem;
   }
 
   .hero__scroll {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    bottom: 1.1rem;
+    bottom: 0.95rem;
   }
 
   .btn-portal,

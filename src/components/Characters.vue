@@ -14,7 +14,7 @@ const activeFilter = ref("All");
 const sectionRef = ref(null);
 const revealed = ref(false);
 const isMobile = useMediaQuery("(max-width: 767px)");
-const pageSize = computed(() => (isMobile.value ? 6 : 14));
+const pageSize = computed(() => (isMobile.value ? 4 : 14));
 
 const { inView: isActive } = useInView(sectionRef, {
   threshold: 0.08,

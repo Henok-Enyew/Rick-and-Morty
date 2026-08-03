@@ -4,7 +4,8 @@ import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
 import { Character_Query } from "../queries/characterQuery";
 import DetailNav from "../components/DetailNav.vue";
-import PortalLoader from "../components/PortalLoader.vue";
+import PortalOverlay from "../components/PortalOverlay.vue";
+import DetailSkeleton from "../components/DetailSkeleton.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { SITE_URL } from "../seo/defaults";
@@ -77,11 +78,11 @@ function formatDate(value) {
     <DetailNav back-label="All characters" />
 
     <main class="detail__main">
-      <PortalLoader v-if="loading" message="Materializing subject…" />
+      <p v-if="error && !character" class="detail__error">{{ error.message }}</p>
 
-      <p v-else-if="error" class="detail__error">{{ error.message }}</p>
+      <DetailSkeleton v-else-if="!character" variant="character" />
 
-      <template v-else-if="character">
+      <template v-else>
         <section class="char-hero">
           <div class="char-hero__portrait">
             <img :src="character.image" :alt="character.name" />
@@ -171,6 +172,11 @@ function formatDate(value) {
 
     <Footer
       figma-url="https://www.figma.com/design/V4IVycz1ON6JD3fPuYhJ67/Character-Page?node-id=0%3A1&t=QaAV9PpkHZK2oOLO-1"
+    />
+
+    <PortalOverlay
+      :show="loading"
+      message="Materializing subject…"
     />
   </div>
 </template>

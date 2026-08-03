@@ -10,6 +10,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  compact: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const lines = [
@@ -38,7 +42,12 @@ onUnmounted(() => clearInterval(timer));
 </script>
 
 <template>
-  <div class="portal-loader" :class="`portal-loader--${accent}`" role="status" aria-live="polite">
+  <div
+    class="portal-loader"
+    :class="[`portal-loader--${accent}`, { 'portal-loader--compact': compact }]"
+    role="status"
+    aria-live="polite"
+  >
     <div class="portal-loader__rings" aria-hidden="true">
       <span class="portal-loader__ring portal-loader__ring--a" />
       <span class="portal-loader__ring portal-loader__ring--b" />
@@ -64,6 +73,29 @@ onUnmounted(() => clearInterval(timer));
   width: 100%;
   padding: 2rem 1rem;
   color: #e8ece4;
+}
+
+.portal-loader--compact {
+  min-height: 0;
+  padding: 0.35rem 0.25rem 0.15rem;
+  gap: 0.9rem;
+}
+
+.portal-loader--compact .portal-loader__rings {
+  width: 6.5rem;
+  height: 6.5rem;
+}
+
+.portal-loader--compact .portal-loader__core {
+  inset: 1.85rem;
+}
+
+.portal-loader--compact .portal-loader__spark {
+  transform: rotate(calc(var(--s) * 45deg)) translateY(-2.9rem);
+}
+
+.portal-loader--compact .portal-loader__text {
+  font-size: 0.86rem;
 }
 
 .portal-loader__rings {

@@ -4,7 +4,8 @@ import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
 import { Location_Query } from "../queries/locationQuery";
 import DetailNav from "../components/DetailNav.vue";
-import PortalLoader from "../components/PortalLoader.vue";
+import PortalOverlay from "../components/PortalOverlay.vue";
+import DetailSkeleton from "../components/DetailSkeleton.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
@@ -75,15 +76,11 @@ function statusClass(status) {
     <DetailNav back-label="All locations" />
 
     <main class="detail__main">
-      <PortalLoader
-        v-if="loading"
-        accent="gold"
-        message="Locking coordinates…"
-      />
+      <p v-if="error && !location" class="detail__error">{{ error.message }}</p>
 
-      <p v-else-if="error" class="detail__error">{{ error.message }}</p>
+      <DetailSkeleton v-else-if="!location" variant="location" />
 
-      <template v-else-if="location">
+      <template v-else>
         <section class="place-hero">
           <p class="detail__eyebrow">Coordinate File</p>
           <h1>{{ location.name }}</h1>
@@ -150,6 +147,12 @@ function statusClass(status) {
 
     <Footer
       figma-url="https://www.figma.com/design/OMn7u5chFuQXKFWLl2QBCJ/Location-Page?node-id=0%3A1&t=EKKAtHgoEALZ5v79-1"
+    />
+
+    <PortalOverlay
+      :show="loading"
+      accent="gold"
+      message="Locking coordinates…"
     />
   </div>
 </template>

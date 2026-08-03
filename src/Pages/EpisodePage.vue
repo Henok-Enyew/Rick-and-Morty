@@ -4,7 +4,8 @@ import { useQuery } from "@vue/apollo-composable";
 import { useRoute } from "vue-router";
 import { Episode_Query } from "../queries/episodeQuery";
 import DetailNav from "../components/DetailNav.vue";
-import PortalLoader from "../components/PortalLoader.vue";
+import PortalOverlay from "../components/PortalOverlay.vue";
+import DetailSkeleton from "../components/DetailSkeleton.vue";
 import Footer from "../components/Footer.vue";
 import { useSeo, buildTitle } from "../composables/useSeo";
 import { DEFAULT_IMAGE, SITE_URL } from "../seo/defaults";
@@ -77,11 +78,11 @@ function statusClass(status) {
     <DetailNav back-label="All episodes" />
 
     <main class="detail__main">
-      <PortalLoader v-if="loading" message="Cueing the episode…" />
+      <p v-if="error && !episode" class="detail__error">{{ error.message }}</p>
 
-      <p v-else-if="error" class="detail__error">{{ error.message }}</p>
+      <DetailSkeleton v-else-if="!episode" variant="episode" />
 
-      <template v-else-if="episode">
+      <template v-else>
         <section class="episode-hero">
           <p class="detail__eyebrow">Broadcast File</p>
           <p class="episode-hero__code">{{ episode.episode }}</p>
@@ -140,6 +141,11 @@ function statusClass(status) {
 
     <Footer
       figma-url="https://www.figma.com/design/i3GtKBaZb4uL4Cd1tc3jcH/Episode-Page?node-id=0%3A1&t=XVOXk91BUPT24iHv-1"
+    />
+
+    <PortalOverlay
+      :show="loading"
+      message="Cueing the episode…"
     />
   </div>
 </template>

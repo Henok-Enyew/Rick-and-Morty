@@ -34,7 +34,7 @@ const {
   goTo,
   pause,
   resume,
-} = usePagedList(filteredCharacters, { pageSize: 10, autoMs: 3000 });
+} = usePagedList(filteredCharacters, { pageSize: 14, autoMs: 3000 });
 
 function statusClass(status) {
   if (status === "Alive") return "is-alive";
@@ -183,7 +183,7 @@ onUnmounted(() => observer?.disconnect());
   width: 100%;
   overflow: hidden;
   background: #121c0e;
-  padding: 2.5rem 5.5rem 2.75rem;
+  padding: 2rem 5.5rem 2.25rem;
   color: #e8ece4;
 }
 
@@ -334,8 +334,8 @@ onUnmounted(() => observer?.disconnect());
   background:
     linear-gradient(160deg, rgba(129, 152, 128, 0.14), rgba(18, 28, 14, 0.55));
   backdrop-filter: blur(10px);
-  padding: 0.95rem;
-  min-height: 18rem;
+  padding: 0.75rem;
+  min-height: 14rem;
   overflow: hidden;
   opacity: 0;
   transform: translateY(18px);
@@ -349,9 +349,11 @@ onUnmounted(() => observer?.disconnect());
 
 .characters__grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.85rem;
-  padding: 0.15rem 0.35rem 0.35rem 0.15rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.1rem;
 }
 
 .characters__grid.is-paging {
@@ -404,9 +406,9 @@ onUnmounted(() => observer?.disconnect());
 }
 
 .char-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-4px) scale(1.02);
   border-color: rgba(156, 255, 102, 0.55);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
   background: rgba(23, 35, 18, 0.9);
 }
 
@@ -431,13 +433,13 @@ onUnmounted(() => observer?.disconnect());
 
 .char-card__badge {
   position: absolute;
-  top: 0.55rem;
-  left: 0.55rem;
+  top: 0.4rem;
+  left: 0.4rem;
   z-index: 1;
-  padding: 0.22rem 0.5rem;
-  border-radius: 0.4rem;
+  padding: 0.16rem 0.4rem;
+  border-radius: 0.35rem;
   font-family: var(--font-display);
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -450,13 +452,13 @@ onUnmounted(() => observer?.disconnect());
 }
 
 .char-card__body {
-  padding: 0.7rem 0.7rem 0.8rem;
+  padding: 0.45rem 0.5rem 0.55rem;
 }
 
 .char-card__name {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.25;
   color: #f3f6ef;
@@ -466,8 +468,8 @@ onUnmounted(() => observer?.disconnect());
 }
 
 .char-card__species {
-  margin: 0.25rem 0 0;
-  font-size: 0.72rem;
+  margin: 0.18rem 0 0;
+  font-size: 0.65rem;
   color: rgba(209, 213, 203, 0.65);
   white-space: nowrap;
   overflow: hidden;
@@ -500,23 +502,23 @@ onUnmounted(() => observer?.disconnect());
 
 @media (max-width: 1279px) {
   .characters__grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 1023px) {
   .characters {
-    padding: 2.25rem 1.75rem 2.25rem;
+    padding: 2rem 1.75rem 2rem;
   }
 
   .characters__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 767px) {
   .characters {
-    padding: 1.85rem 0.85rem 2rem;
+    padding: 1.75rem 0.85rem 1.85rem;
   }
 
   .characters__header {
@@ -526,19 +528,19 @@ onUnmounted(() => observer?.disconnect());
 
   .characters__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem;
+    gap: 0.5rem;
   }
 
   .characters__panel {
-    padding: 0.7rem;
+    padding: 0.6rem;
   }
 
   .char-card__body {
-    padding: 0.55rem 0.55rem 0.65rem;
+    padding: 0.4rem 0.4rem 0.5rem;
   }
 
   .char-card__name {
-    font-size: 0.82rem;
+    font-size: 0.74rem;
   }
 }
 

@@ -54,7 +54,7 @@ defineProps({
   width: min(20rem, 100%);
   padding: 1.5rem 1.25rem 1.25rem;
   border-radius: 1rem;
-  border: 1px solid rgba(81, 217, 40, 0.28);
+  border: none;
   background: rgba(18, 28, 14, 0.82);
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.4),
@@ -63,7 +63,6 @@ defineProps({
 }
 
 .portal-overlay--gold .portal-overlay__card {
-  border-color: rgba(224, 187, 55, 0.35);
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.4),
     0 0 40px rgba(224, 187, 55, 0.1);

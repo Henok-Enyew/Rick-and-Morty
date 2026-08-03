@@ -267,9 +267,9 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 0.7rem 1.25rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.7rem 1.75rem;
 }
 
 .site-nav__brand {
@@ -450,6 +450,10 @@ onUnmounted(() => {
 
 /* Project uses max-width md breakpoint (<=767px) for mobile */
 @media (max-width: 767px) {
+  .site-nav__shell {
+    padding: 0.7rem 1rem;
+  }
+
   .site-nav__links,
   .site-nav__cta {
     display: none;

@@ -79,8 +79,13 @@ export function usePagedList(
       progress.value = 0;
       return;
     }
+    const d = delay();
+    if (!d) {
+      progress.value = 0;
+      return;
+    }
     const elapsed = performance.now() - progressStartedAt;
-    progress.value = Math.min(1, elapsed / autoMs);
+    progress.value = Math.min(1, elapsed / d);
     if (progress.value < 1) {
       progressTimer = requestAnimationFrame(tickProgress);
     }
@@ -89,13 +94,14 @@ export function usePagedList(
   function restartAuto() {
     clearTimers();
     progress.value = 0;
-    if (paused.value || !isEnabled() || totalPages.value <= 1 || !autoMs) return;
+    const d = delay();
+    if (paused.value || !isEnabled() || totalPages.value <= 1 || !d) return;
 
     progressStartedAt = performance.now();
     progressTimer = requestAnimationFrame(tickProgress);
     autoTimer = setTimeout(() => {
       goTo(page.value + 1);
-    }, autoMs);
+    }, d);
   }
 
   function pause() {

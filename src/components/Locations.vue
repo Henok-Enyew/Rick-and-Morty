@@ -375,7 +375,7 @@ function setType(type) {
 .place-card {
   position: relative;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 2.25rem 1fr 2.1rem;
   align-items: center;
   gap: 0.8rem;
   padding: 0.85rem 0.95rem;
@@ -437,6 +437,7 @@ function setType(type) {
   font-weight: 700;
   line-height: 1.25;
   color: #f3f6ef;
+  min-width: 0; /* required for ellipsis inside grid */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -450,6 +451,7 @@ function setType(type) {
   gap: 0.25rem;
   font-size: 0.72rem;
   color: rgba(209, 213, 203, 0.62);
+  min-width: 0; /* required so meta doesn't force the action column */
 }
 
 .place-card__sep {

@@ -576,7 +576,6 @@ const { inView } = useInView(heroRef, {
   .hero__logo {
     width: min(15.5rem, 74vw);
     margin-top: 0.35rem;
-    animation: none !important;
   }
 
   .hero__tags {

@@ -19,10 +19,10 @@ const { inView } = useInView(footerRef, {
 const year = new Date().getFullYear();
 
 const links = [
-  { label: "About", href: "/#about" },
-  { label: "Episodes", href: "/#episodes" },
-  { label: "Characters", href: "/#characters" },
-  { label: "Locations", href: "/#locations" },
+  { label: "About", to: { path: "/", hash: "#about" } },
+  { label: "Episodes", to: { path: "/", hash: "#episodes" } },
+  { label: "Characters", to: { path: "/", hash: "#characters" } },
+  { label: "Locations", to: { path: "/", hash: "#locations" } },
 ];
 </script>
 
@@ -50,9 +50,14 @@ const links = [
       </div>
 
       <nav class="site-footer__nav" aria-label="Footer">
-        <a v-for="link in links" :key="link.href" :href="link.href">
+        <router-link
+          v-for="link in links"
+          :key="link.to.hash"
+          class="site-footer__footerlink"
+          :to="link.to"
+        >
           {{ link.label }}
-        </a>
+        </router-link>
       </nav>
 
       <div class="site-footer__socials">

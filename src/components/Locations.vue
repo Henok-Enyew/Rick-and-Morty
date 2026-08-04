@@ -68,6 +68,14 @@ const {
 function setType(type) {
   activeType.value = type;
 }
+
+function truncateLocationName(value, max = 15) {
+  if (!value) return "";
+  const str = String(value);
+  if (str.length <= max) return str;
+  const keep = Math.max(0, max - 3);
+  return `${str.slice(0, keep)}...`;
+}
 </script>
 
 <template>
@@ -154,7 +162,7 @@ function setType(type) {
 
               <div class="place-card__body">
                 <h3 class="place-card__name" :title="location.name">
-            {{ location.name }}
+                  {{ truncateLocationName(location.name, 15) }}
                 </h3>
                 <p class="place-card__meta">
                   <span>{{ location.type || "Unknown" }}</span>

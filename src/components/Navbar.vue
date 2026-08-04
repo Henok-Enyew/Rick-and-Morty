@@ -16,6 +16,7 @@ const activeSection = ref("");
 
 let lastY = 0;
 let revealTimer = null;
+let scrollRaf = 0;
 
 const navClasses = computed(() => [
   "site-nav",
@@ -108,12 +109,17 @@ function updateActiveSection() {
 }
 
 function handleScroll() {
-  onScroll();
-  updateActiveSection();
+  if (scrollRaf) return;
+  scrollRaf = requestAnimationFrame(() => {
+    scrollRaf = 0;
+    onScroll();
+    updateActiveSection();
+  });
 }
 
 watch(open, (isOpen) => {
   document.body.style.overflow = isOpen ? "hidden" : "";
+  if (isOpen) document.body.style.overflowX = "hidden";
 });
 
 onMounted(() => {
@@ -127,7 +133,9 @@ onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
   window.removeEventListener("keydown", onKeydown);
   document.body.style.overflow = "";
+  document.body.style.overflowX = "";
   clearTimeout(revealTimer);
+  if (scrollRaf) cancelAnimationFrame(scrollRaf);
 });
 </script>
 
@@ -258,8 +266,13 @@ onUnmounted(() => {
 <style scoped>
 .site-nav {
   position: fixed;
-  inset: 0 0 auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
   z-index: 100;
+  overflow: hidden;
   transition:
     transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.3s ease,
@@ -485,8 +498,18 @@ onUnmounted(() => {
 
 /* Project uses max-width md breakpoint (<=767px) for mobile */
 @media (max-width: 767px) {
+  .site-nav--scrolled,
+  .site-nav--open {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(18, 28, 14, 0.94);
+  }
+
   .site-nav__shell {
     padding: 0.7rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .site-nav__links,

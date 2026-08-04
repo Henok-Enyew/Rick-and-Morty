@@ -549,19 +549,34 @@ const { inView } = useInView(heroRef, {
   .hero {
     align-items: stretch;
     min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .hero__media {
+    animation: none !important;
+    transform: none;
+    will-change: auto;
+  }
+
+  .hero__glow,
+  .hero__grid {
+    display: none;
   }
 
   .hero__content {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
     min-height: 100svh;
     padding: 5.15rem 1.15rem 4.35rem;
+    box-sizing: border-box;
   }
 
   .hero__logo {
     width: min(15.5rem, 74vw);
     margin-top: 0.35rem;
+    animation: none !important;
   }
 
   .hero__tags {
@@ -606,6 +621,12 @@ const { inView } = useInView(heroRef, {
     right: auto;
     transform: translateX(-50%);
     bottom: 0.95rem;
+  }
+
+  .hero__scroll i::after,
+  .btn-portal__shine,
+  .btn-ghost__border {
+    animation: none !important;
   }
 
   .btn-portal,

@@ -45,6 +45,8 @@ const filteredLocations = computed(() => {
   );
 });
 
+const autoMs = computed(() => (isMobile.value ? 4500 : 3000));
+
 const {
   page,
   totalPages,
@@ -59,7 +61,7 @@ const {
   resume,
 } = usePagedList(filteredLocations, {
   pageSize,
-  autoMs: 3000,
+  autoMs,
   enabled: isActive,
 });
 

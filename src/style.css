@@ -17,6 +17,8 @@ html {
   scroll-padding-top: 5rem;
   scrollbar-width: thin;
   scrollbar-width: none;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -24,6 +26,9 @@ body {
   color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
 }
 
 h1,
@@ -77,5 +82,18 @@ label {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile: cut paint cost and prevent sideways scroll */
+@media (max-width: 767px) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  #app,
+  .page-shell {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }

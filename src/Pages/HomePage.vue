@@ -39,7 +39,7 @@ useSeo({
 });
 </script>
 <template>
-  <div class="w-full bg-primary">
+  <div class="page-shell w-full bg-primary">
     <Navbar />
     <Hero />
     <About />
@@ -49,4 +49,10 @@ useSeo({
     <Footer />
   </div>
 </template>
-<style></style>
+<style>
+.page-shell {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+}
+</style>

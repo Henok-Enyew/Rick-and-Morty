@@ -5,7 +5,7 @@ import { computed, onMounted, onUnmounted, ref, unref, watch } from "vue";
  * @param {import('vue').Ref|import('vue').ComputedRef} itemsRef
  * @param {{
  *   pageSize?: number|import('vue').Ref<number>|import('vue').ComputedRef<number>,
- *   autoMs?: number,
+ *   autoMs?: number|import('vue').Ref<number>|import('vue').ComputedRef<number>,
  *   enabled?: import('vue').Ref<boolean>|boolean
  * }} options
  */
@@ -24,6 +24,7 @@ export function usePagedList(
 
   const isEnabled = () => unref(enabled) !== false;
   const size = () => Math.max(1, Number(unref(pageSize)) || 1);
+  const delay = () => Math.max(0, Number(unref(autoMs)) || 0);
 
   const totalPages = computed(() =>
     Math.max(1, Math.ceil((itemsRef.value?.length || 0) / size()))

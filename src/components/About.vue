@@ -106,7 +106,7 @@ function onSwiper(swiper) {
 }
 
 function onSlideChange(swiper) {
-  activeIndex.value = swiper.realIndex;
+  activeIndex.value = ((swiper.realIndex % photos.length) + photos.length) % photos.length;
 }
 </script>
 
@@ -148,12 +148,16 @@ function onSlideChange(swiper) {
           :creative-effect="creativeEffect"
           :grab-cursor="true"
           :loop="true"
-          :keyboard="{ enabled: true }"
-          :autoplay="{
-            delay: 3200,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-          }"
+          :keyboard="{ enabled: !isMobile }"
+          :autoplay="
+            isMobile
+              ? false
+              : {
+                  delay: 3200,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }
+          "
           :pagination="{ clickable: true }"
           class="about__swiper"
           @swiper="onSwiper"
@@ -588,18 +592,20 @@ function onSlideChange(swiper) {
 @media (max-width: 767px) {
   .about {
     padding: 1.75rem 0.85rem 1.75rem;
-    overflow: visible;
+    overflow: hidden;
+    max-width: 100%;
   }
 
-  .about__portal {
-    width: 60%;
-    right: -5rem;
-    opacity: 0.65;
+  .about__portal,
+  .about__orb {
+    display: none;
   }
 
   .about__card {
     padding: 0.95rem 0.75rem 1.1rem;
     overflow: hidden;
+    max-width: 100%;
+    animation: none !important;
   }
 
   .about__gallery {

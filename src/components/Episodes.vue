@@ -39,12 +39,9 @@ function setSeason(season) {
   <section
     id="episodes"
     ref="sectionRef"
-    class="episodes"
+    class="episodes section-stage"
     :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
-    <div class="episodes__media" aria-hidden="true" />
-    <div class="episodes__veil" aria-hidden="true" />
-
     <div class="episodes__inner">
       <header class="episodes__header">
         <div>
@@ -121,29 +118,14 @@ function setSeason(season) {
   position: relative;
   isolation: isolate;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   padding: 2.5rem 5.5rem 2.75rem;
   color: #e8ece4;
+  background: transparent;
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
-}
-
-.episodes__media {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    url("https://www.looper.com/img/gallery/the-most-terrible-things-rick-morty-have-ever-done/cronenberg-the-world-1497028481.jpg")
-    center / cover no-repeat;
-}
-
-.episodes__veil {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(18, 28, 14, 0.82) 0%, rgba(18, 28, 14, 0.88) 55%, rgba(18, 28, 14, 0.94) 100%),
-    radial-gradient(ellipse at 15% 20%, rgba(81, 217, 40, 0.14), transparent 45%);
 }
 
 .episodes__inner {

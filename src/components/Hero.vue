@@ -12,13 +12,12 @@ const { inView } = useInView(heroRef, {
 
 <template>
   <section
+    id="hero"
     ref="heroRef"
-    class="hero"
+    class="hero section-stage"
     :class="{ 'is-active': inView }"
     aria-label="Rick and Morty hero"
   >
-    <div class="hero__media" aria-hidden="true" />
-    <div class="hero__veil" aria-hidden="true" />
     <div class="hero__glow hero__glow--one" aria-hidden="true" />
     <div class="hero__glow hero__glow--two" aria-hidden="true" />
     <div class="hero__grid" aria-hidden="true" />
@@ -110,42 +109,12 @@ const { inView } = useInView(heroRef, {
   display: flex;
   align-items: flex-end;
   color: #e8ece4;
-}
-
-.hero__media {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  background:
-    url("https://i.pinimg.com/originals/0d/53/3a/0d533a8327df5569e02aba4fd3497461.jpg")
-    right bottom / cover no-repeat;
-  transform: scale(1.06);
-  animation: hero-ken 22s ease-in-out infinite alternate;
-  animation-play-state: paused;
-  will-change: auto;
-}
-
-.hero.is-active .hero__media {
-  animation-play-state: running;
-  will-change: transform;
-}
-
-.hero:not(.is-active) .hero__media {
-  will-change: auto;
-}
-
-.hero__veil {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    linear-gradient(90deg, rgba(10, 16, 8, 0.92) 0%, rgba(10, 16, 8, 0.72) 42%, rgba(10, 16, 8, 0.28) 72%, rgba(10, 16, 8, 0.45) 100%),
-    linear-gradient(180deg, rgba(18, 28, 14, 0.35) 0%, rgba(18, 28, 14, 0.15) 40%, rgba(18, 28, 14, 0.88) 100%);
+  background: transparent;
 }
 
 .hero__glow {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   border-radius: 9999px;
   filter: blur(50px);
   pointer-events: none;
@@ -180,7 +149,7 @@ const { inView } = useInView(heroRef, {
 .hero__grid {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   opacity: 0.08;
   background-image:
     linear-gradient(rgba(156, 255, 102, 0.35) 1px, transparent 1px),
@@ -502,11 +471,6 @@ const { inView } = useInView(heroRef, {
   }
 }
 
-@keyframes hero-ken {
-  from { transform: scale(1.06) translate3d(0, 0, 0); }
-  to { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
-}
-
 @keyframes glow-drift {
   from { transform: translate3d(0, 0, 0) scale(1); }
   to { transform: translate3d(8%, -6%, 0) scale(1.12); }
@@ -550,27 +514,6 @@ const { inView } = useInView(heroRef, {
     align-items: stretch;
     min-height: 100svh;
     overflow: hidden;
-  }
-
-  .hero__media {
-    background:
-      url("../assets/Images/hero-mobile.jpeg")
-      center top / cover no-repeat;
-    animation: none !important;
-    transform: none;
-    will-change: auto;
-  }
-
-  /* the portrait art is centred and already near-black, so it needs an even
-     wash rather than the desktop veil's heavy left-side fade */
-  .hero__veil {
-    background: linear-gradient(
-      180deg,
-      rgba(10, 16, 8, 0.82) 0%,
-      rgba(10, 16, 8, 0.5) 28%,
-      rgba(10, 16, 8, 0.58) 62%,
-      rgba(10, 16, 8, 0.92) 100%
-    );
   }
 
   .hero__glow,

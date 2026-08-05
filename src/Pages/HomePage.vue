@@ -3,6 +3,8 @@ import { defineAsyncComponent } from "vue";
 import Navbar from "../components/Navbar.vue";
 import Hero from "../components/Hero.vue";
 import Footer from "../components/Footer.vue";
+import BackgroundLayer from "../components/BackgroundLayer.vue";
+import { useSectionBackgrounds } from "../composables/useSectionBackgrounds";
 import { useSeo } from "../composables/useSeo";
 import {
   DEFAULT_DESCRIPTION,
@@ -17,6 +19,10 @@ const About = defineAsyncComponent(() => import("../components/About.vue"));
 const Episodes = defineAsyncComponent(() => import("../components/Episodes.vue"));
 const Characters = defineAsyncComponent(() => import("../components/Characters.vue"));
 const Locations = defineAsyncComponent(() => import("../components/Locations.vue"));
+
+const SECTION_IDS = ["hero", "about", "episodes", "characters", "locations"];
+
+const { activeSection } = useSectionBackgrounds(SECTION_IDS);
 
 useSeo({
   title: DEFAULT_SEO.title,
@@ -38,21 +44,33 @@ useSeo({
   },
 });
 </script>
+
 <template>
-  <div class="page-shell w-full bg-primary">
-    <Navbar />
-    <Hero />
-    <About />
-    <Episodes />
-    <Characters />
-    <Locations />
-    <Footer />
+  <div class="page-shell w-full">
+    <BackgroundLayer :active-section="activeSection" />
+    <div class="page-shell__content">
+      <Navbar />
+      <Hero />
+      <About />
+      <Episodes />
+      <Characters />
+      <Locations />
+      <Footer />
+    </div>
   </div>
 </template>
+
 <style>
 .page-shell {
+  position: relative;
   overflow-x: hidden;
   max-width: 100%;
   width: 100%;
+  background: transparent;
+}
+
+.page-shell__content {
+  position: relative;
+  z-index: 1;
 }
 </style>

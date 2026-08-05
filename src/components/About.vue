@@ -114,7 +114,7 @@ function onSlideChange(swiper) {
   <section
     id="about"
     ref="aboutRef"
-    class="about"
+    class="about section-stage"
     :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <img
@@ -217,8 +217,10 @@ function onSlideChange(swiper) {
   position: relative;
   isolation: isolate;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
-  background: #121c0e;
+  background: transparent;
   padding: 2.25rem 6rem 2.5rem;
   content-visibility: visible;
   contain-intrinsic-size: auto 720px;

@@ -69,7 +69,7 @@ function setFilter(filter) {
   <section
     id="characters"
     ref="sectionRef"
-    class="characters"
+    class="characters section-stage"
     :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
     <div class="characters__glow" aria-hidden="true" />
@@ -184,8 +184,10 @@ function setFilter(filter) {
   position: relative;
   isolation: isolate;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
-  background: #121c0e;
+  background: transparent;
   padding: 2rem 5.5rem 2.25rem;
   color: #e8ece4;
   content-visibility: auto;

@@ -82,12 +82,9 @@ function truncateLocationName(value, max = 15) {
   <section
     id="locations"
     ref="sectionRef"
-    class="locations"
+    class="locations section-stage"
     :class="{ 'is-inview': revealed, 'is-active': isActive }"
   >
-    <div class="locations__media" aria-hidden="true" />
-    <div class="locations__veil" aria-hidden="true" />
-
     <div class="locations__inner">
       <header class="locations__header">
         <div>
@@ -200,29 +197,14 @@ function truncateLocationName(value, max = 15) {
   position: relative;
   isolation: isolate;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   padding: 2.5rem 5.5rem 2.75rem;
   color: #e8ece4;
+  background: transparent;
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
-}
-
-.locations__media {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    url("https://i.pinimg.com/564x/46/d7/7b/46d77b586d6c00f2533c6e63f15fdd86.jpg")
-    center / cover no-repeat;
-}
-
-.locations__veil {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    linear-gradient(180deg, rgba(18, 28, 14, 0.84) 0%, rgba(18, 28, 14, 0.9) 60%, rgba(18, 28, 14, 0.95) 100%),
-    radial-gradient(ellipse at 80% 15%, rgba(224, 187, 55, 0.14), transparent 42%);
 }
 
 .locations__inner {

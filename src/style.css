@@ -29,6 +29,13 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   position: relative;
+  background-color: #121c0e;
+}
+
+.section-stage {
+  position: relative;
+  z-index: 1;
+  background: transparent;
 }
 
 h1,

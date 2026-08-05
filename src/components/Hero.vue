@@ -553,9 +553,24 @@ const { inView } = useInView(heroRef, {
   }
 
   .hero__media {
+    background:
+      url("../assets/Images/hero-mobile.jpeg")
+      center top / cover no-repeat;
     animation: none !important;
     transform: none;
     will-change: auto;
+  }
+
+  /* the portrait art is centred and already near-black, so it needs an even
+     wash rather than the desktop veil's heavy left-side fade */
+  .hero__veil {
+    background: linear-gradient(
+      180deg,
+      rgba(10, 16, 8, 0.82) 0%,
+      rgba(10, 16, 8, 0.5) 28%,
+      rgba(10, 16, 8, 0.58) 62%,
+      rgba(10, 16, 8, 0.92) 100%
+    );
   }
 
   .hero__glow,
